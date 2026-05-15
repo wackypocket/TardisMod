@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>TARDIS Mod - A Darkcraft Mod</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript" src="js/guide.js"></script>
+</head>
+<body>
+
+<div class="top"></div>
+<h2>USER GUIDE</h2>
+Most levers/wheels which can be moved one way by right clicking can move back by sneak right clicking with an empty hand.<br><br>
+
+Takeoff sequence:<br>
+1) Set coordinates<br>
+2) Prime the Helmic Regulator<br>
+3) Unlock the Temporal Lockdown Switch<br>
+4) Pull the Take Off Lever<br><br>
+<div id="guideContainer">
+<div id="leftButton" class="stroked"><div class="vcenter"> &lt; </div></div>
+<div id="rightButton" class="stroked"> &gt; </div>
+<div id="divGuideFront"><img class="guide" id="GuideFront" src="img/guide-front.png"><br>
+<div class="guideText"><h2>Front Side</h2>
+Coord Mode Switch: Switches the coordinate system between absolute coords and relative coords. (In absolute mode, setting the controls to x=5,y=64,z=43 will move your TARDIS to 5,64,43. In relative mode, it will move your TARDIS along by 5,64,43)<br><br>
+
+Coordinate Wheel: Sets which direction the TARDIS should face when it lands.<br><br>
+
+Gauges: The 4 gauges tell you what your xp is, your energy, number of rooms and speed. Right clicking on each gauge will give more information.<br><br>
+
+Screwdriver Holder: Just a cosy place for your screwdriver (also where newly generated screwdrivers go and where screwdrivers can be converted to energy). Placing a screwdriver here also links it to this TARDIS.<br><br>
+
+Screwdriver Button: Generates a new screwdriver using TARDIS Energy or converts a screwdriver back to TARDIS Energy.<br><br>
+
+Speed Lever: Setting this lever controls the speed at which you fly through the temporal vortex.<br><br>
+
+Take Off Lever: Pulling this lever after successfully completing all the other steps of the take off sequence will cause your TARDIS to take flight towards its destination.
+</div></div>
+<div id="divGuideRight"><img class="guide" id="GuideRight" src="img/guide-right.png"><br>
+<div class="guideText"><h2>Right Side</h2>
+X Controls: These controls set what X coordinate you should go when flying.<br><br>
+
+Coord Estimator: Right clicking this will cause your TARDIS to attempt to calculate what your destination will be. Initially, this could be up to 40 blocks away from where you end up landing, however, leveling up your TARDIS will cause this to be more accurate.<br><br>
+
+Infinite Flight Mode: Having infinite flight mode active (switch out) when taking off will cause your TARDIS to drift in the time vortex, allowing you to gain experience using the active flight controls and level up your TARDIS.<br><br>
+
+Stabilizers: Upon reaching level 11, you gain access to the stabilizers, which when activated (switch out), cause the TARDIS to pilot itself to its destination, causing a decrease in XP gain, but reducing hazards and work required.<br><br>
+
+Room Deletion Button: Right clicking this button and then sneak right clicking it will cause your TARDIS to begin destroying all of the rooms within itself, apart from the console room.
+</div></div>
+<div id="divGuideBack"><img class="guide" id="GuideBack" src="img/guide-back.png"><br>
+<div class="guideText"><h2>Back Side</h2>
+Y Controls: These controls set what Y coordinate you should go to when flying.<br><br>
+
+Land Ground Control: When this control is active (switch out), your TARDIS will attempt to land on the ground, even if you have set the Y controls to be much higher than the ground.<br><br>
+
+Dimension Control: This lever sets which dimension your TARDIS will materialise in after flying.<br><br>
+
+Temporal Lockdown Switch: This control is part of the takeoff sequence and should be flipped after the Helmic Regulator is primed.<br><br>
+
+Interior Lighting Switch: Toggles the mood of lighting in rooms with a view to the interior dimension's sky.<br><br>
+
+Screwdriver Slot: A place to hold your screwdriver while you set what schematic is loaded on to it using the controls to the right. The screwdriver slot on the front will also get this schematic assigned to it, but this one's more convenient.<br><br>
+
+Schematic Selection Screen: Shows the name of the schematic which will be put on the inserted screwdriver.<br><br>
+
+Up-Down Controls: Cycles through the list of available schematics to be loaded onto the screwdriver.
+</div></div>
+<div id="divGuideLeft"><img class="guide" id="GuideLeft" src="img/guide-left.png"><br>
+<div class="guideText"><h2>Left Side</h2>
+Z Controls: These controls set what Z coordinate you should go to when flying.<br><br>
+
+Helmic Regulator: The first step in the take off procedure.<br><br>
+
+Ext Scanner: At level 5, you get the ability to scan the 4 sides of the TARDIS exterior to determine whether or not it should be safe to step out the door, or if you should rotate the TARDIS to open the door to a safe side. Also has the added benefit of letting you know exactly what coordinates you've landed at.<br><br>
+
+Save-Load: When activated (switch out) this switch allows you to save your current controls into one of the 20 save slots just to the left.<br><br>
+
+Current Pos: Sets your controls to the control state which resulted in you landing at your current location.<br><br>
+
+Last Pos: Sets your controls to the control state that resulted in you landing at your previous location.<br><br>
+
+Save Slots: When the Save-Load switch is activated, activating one of these switches will save your current control set to one of these buttons. When the Save-Load switch is not activated, activating one of these switches with a saved control set will set your controls to that control set.
+</div></div></div>
+
+</body>
+</html>
