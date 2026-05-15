@@ -11,230 +11,214 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.common.registry.GameData;
+import io.darkcraft.darkcore.mod.nbt.NBTUtils;
 import tardis.common.TMRegistry;
 import tardis.common.core.TardisOutput;
 import tardis.common.tileents.SchemaCoreTileEntity;
 
-public class SchemaStore
-{
-	private String							blockName	= null;
-	private Block							block;
-	private int								blockMeta;
-	private NBTTagCompound					nbtStore	= null;
+public class SchemaStore {
 
-	public static final SchemaStore			airBlock	= new SchemaStore(Blocks.air, 0, null);
+    private String blockName = null;
+    private Block block;
+    private int blockMeta;
+    private NBTTagCompound nbtStore = null;
 
-	private static HashSet<Block>			bannedIDs	= null;
-	private static HashMap<String, Block>	blockCache	= new HashMap<String, Block>();
+    public static final SchemaStore airBlock = new SchemaStore(Blocks.air, 0, null);
 
-	public Block getBlock()
-	{
-		return block;
-	}
+    private static HashSet<Block> bannedIDs = null;
+    private static HashMap<String, Block> blockCache = new HashMap<String, Block>();
 
-	public int getBlockMeta()
-	{
-		return blockMeta;
-	}
+    public Block getBlock() {
+        return block;
+    }
 
-	private SchemaStore(Block bid, int bm, NBTTagCompound nbt)
-	{
-		block = bid;
-		blockMeta = bm;
-		nbtStore = nbt;
-	}
+    public int getBlockMeta() {
+        return blockMeta;
+    }
 
-	private SchemaStore()
-	{
-		if (bannedIDs == null)
-		{
-			bannedIDs = new HashSet<Block>();
-			bannedIDs.add(TMRegistry.tardisCoreBlock);
-			bannedIDs.add(TMRegistry.tardisConsoleBlock);
-			bannedIDs.add(TMRegistry.tardisEngineBlock);
-		}
-	}
+    private SchemaStore(Block bid, int bm, NBTTagCompound nbt) {
+        block = bid;
+        blockMeta = bm;
+        nbtStore = nbt;
+    }
 
-	public void loadToWorld(World w, int x, int y, int z)
-	{
-		loadToWorld(w, blockMeta, x, y, z);
-	}
+    private SchemaStore() {
+        if (bannedIDs == null) {
+            bannedIDs = new HashSet<Block>();
+            bannedIDs.add(TMRegistry.tardisCoreBlock);
+            bannedIDs.add(TMRegistry.tardisConsoleBlock);
+            bannedIDs.add(TMRegistry.tardisEngineBlock);
+        }
+    }
 
-	public void loadToWorld(World w, int meta, int x, int y, int z)
-	{
-		if ((block == TMRegistry.decoBlock) && (meta == 6))
-		{
-			block = TMRegistry.decoTransBlock;
-			meta = blockMeta = 0;
-		}
-		if (block == TMRegistry.decoBlock)
-		{
-			switch(meta)
-			{
-				case 1: meta = 0; break;
-				case 2: block = TMRegistry.colorableRoundelBlock; meta = 3; break;
-				case 4: block = TMRegistry.colorableRoundelBlock; meta = 15; break;
-				case 3: block = TMRegistry.colorableWallBlock; meta = 15; break;
-				case 5: block = TMRegistry.colorableFloorBlock; meta = 15; break;
-				case 7: block = TMRegistry.colorableWallBlock; meta = 3; break;
-			}
-		}
+    public void loadToWorld(World w, int x, int y, int z) {
+        loadToWorld(w, blockMeta, x, y, z);
+    }
 
-		w.setBlock(x, y, z, block, meta, 3);
-		if (nbtStore != null)
-		{
-			nbtStore.setInteger("x", x);
-			nbtStore.setInteger("y", y);
-			nbtStore.setInteger("z", z);
-			TileEntity newTileEntity = TileEntity.createAndLoadEntity(nbtStore);
-			if (newTileEntity != null)
-			{
-				newTileEntity.setWorldObj(w);
-				w.setTileEntity(x, y, z, newTileEntity);
-				newTileEntity.validate();
-			}
-		}
-	}
+    public void loadToWorld(World w, int meta, int x, int y, int z) {
+        if ((block == TMRegistry.decoBlock) && (meta == 6)) {
+            block = TMRegistry.decoTransBlock;
+            meta = blockMeta = 0;
+        }
+        if (block == TMRegistry.decoBlock) {
+            switch (meta) {
+                case 1:
+                    meta = 0;
+                    break;
+                case 2:
+                    block = TMRegistry.colorableRoundelBlock;
+                    meta = 3;
+                    break;
+                case 4:
+                    block = TMRegistry.colorableRoundelBlock;
+                    meta = 15;
+                    break;
+                case 3:
+                    block = TMRegistry.colorableWallBlock;
+                    meta = 15;
+                    break;
+                case 5:
+                    block = TMRegistry.colorableFloorBlock;
+                    meta = 15;
+                    break;
+                case 7:
+                    block = TMRegistry.colorableWallBlock;
+                    meta = 3;
+                    break;
+            }
+        }
 
-	public static SchemaStore storeWorldBlock(World w, int x, int y, int z)
-	{
-		if (bannedIDs == null)
-		{
-			bannedIDs = new HashSet<Block>();
-			bannedIDs.add(TMRegistry.tardisCoreBlock);
-			bannedIDs.add(TMRegistry.tardisConsoleBlock);
-			bannedIDs.add(TMRegistry.tardisEngineBlock);
-		}
+        w.setBlock(x, y, z, block, meta, 3);
+        if (nbtStore != null) {
+            nbtStore.setInteger("x", x);
+            nbtStore.setInteger("y", y);
+            nbtStore.setInteger("z", z);
+            TileEntity newTileEntity = TileEntity.createAndLoadEntity(nbtStore);
+            if (newTileEntity != null) {
+                newTileEntity.setWorldObj(w);
+                w.setTileEntity(x, y, z, newTileEntity);
+                newTileEntity.validate();
+            }
+        }
+    }
 
-		if ((w.getBlock(x, y, z) == Blocks.air) || bannedIDs.contains(w.getBlock(x, y, z))) return null;
+    public static SchemaStore storeWorldBlock(World w, int x, int y, int z) {
+        if (bannedIDs == null) {
+            bannedIDs = new HashSet<Block>();
+            bannedIDs.add(TMRegistry.tardisCoreBlock);
+            bannedIDs.add(TMRegistry.tardisConsoleBlock);
+            bannedIDs.add(TMRegistry.tardisEngineBlock);
+        }
 
-		SchemaStore newStore = new SchemaStore();
-		newStore.block = w.getBlock(x, y, z);
-		newStore.blockMeta = w.getBlockMetadata(x, y, z);
-		TileEntity te = w.getTileEntity(x, y, z);
-		if ((te != null) && !(te instanceof SchemaCoreTileEntity))
-		{
-			newStore.nbtStore = new NBTTagCompound();
-			te.writeToNBT(newStore.nbtStore);
-		}
-		newStore.blockName = getNameFromBlock(newStore.block);
-		return newStore;
-	}
+        if ((w.getBlock(x, y, z) == Blocks.air) || bannedIDs.contains(w.getBlock(x, y, z))) return null;
 
-	public static SchemaStore loadFromNBT(NBTTagCompound nbt)
-	{
-		SchemaStore newStore = new SchemaStore();
-		newStore.blockMeta = nbt.getInteger("tdSchemaBMD");
-		if (nbt.hasKey("tdSchemaBName"))
-		{
-			String name = nbt.getString("tdSchemaBName");
-			Block nbid = getBlockFromName(name);
-			if (nbid != null)
-			{
-				newStore.block = nbid;
-			}
-			else
-			{
-				newStore.block = Blocks.air;
-			}
-		}
-		if (nbt.hasKey("tdSchemaNBT")) newStore.nbtStore = nbt.getCompoundTag("tdSchemaNBT");
-		// TardisOutput.print("TSS", newStore.toString());
-		return newStore;
-	}
+        SchemaStore newStore = new SchemaStore();
+        newStore.block = w.getBlock(x, y, z);
+        newStore.blockMeta = w.getBlockMetadata(x, y, z);
+        TileEntity te = w.getTileEntity(x, y, z);
+        if ((te != null) && !(te instanceof SchemaCoreTileEntity)) {
+            newStore.nbtStore = new NBTTagCompound();
+            te.writeToNBT(newStore.nbtStore);
+        }
+        newStore.blockName = getNameFromBlock(newStore.block);
+        return newStore;
+    }
 
-	public NBTTagCompound getTagCompound()
-	{
-		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("tdSchemaBMD", blockMeta);
-		if (blockName == null) blockName = getNameFromBlock(block);
-		if (blockName != null) nbt.setString("tdSchemaBName", blockName);
-		if (nbtStore != null) nbt.setTag("tdSchemaNBT", nbtStore);
-		return nbt;
-	}
+    public static SchemaStore loadFromNBT(NBTTagCompound nbt) {
+        SchemaStore newStore = new SchemaStore();
+        newStore.blockMeta = io.darkcraft.darkcore.mod.nbt.NBTUtils.getInt(nbt, "tdSchemaBMD", newStore.blockMeta);
+        if (io.darkcraft.darkcore.mod.nbt.NBTUtils.hasCompound(nbt, "tdSchemaBName")) {
+            String name = io.darkcraft.darkcore.mod.nbt.NBTUtils.getString(nbt, "tdSchemaBName", null);
+            Block nbid = getBlockFromName(name);
+            if (nbid != null) {
+                newStore.block = nbid;
+            } else {
+                newStore.block = Blocks.air;
+            }
+        }
+        if (io.darkcraft.darkcore.mod.nbt.NBTUtils.hasCompound(nbt, "tdSchemaNBT"))
+            newStore.nbtStore = NBTUtils.getCompoundOrEmpty(nbt, "tdSchemaNBT");
+        // TardisOutput.print("TSS", newStore.toString());
+        return newStore;
+    }
 
-	@Override
-	public String toString()
-	{
-		return "SchemaStore [blockID=" + block.getUnlocalizedName() + ", blockMeta=" + blockMeta + "]";
-	}
+    public NBTTagCompound getTagCompound() {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setInteger("tdSchemaBMD", blockMeta);
+        if (blockName == null) blockName = getNameFromBlock(block);
+        if (blockName != null) nbt.setString("tdSchemaBName", blockName);
+        if (nbtStore != null) nbt.setTag("tdSchemaNBT", nbtStore);
+        return nbt;
+    }
 
-	private static String getNameFromBlock(Block id)
-	{
-		String blockName = GameData.getBlockRegistry().getNameForObject(id);
-		if (blockName != null) return blockName;
-		if (id != null) return id.getUnlocalizedName();
-		return null;
-	}
+    @Override
+    public String toString() {
+        return "SchemaStore [blockID=" + block.getUnlocalizedName() + ", blockMeta=" + blockMeta + "]";
+    }
 
-	private static Block getBlockFromName(String name)
-	{
-		Block b = null;
-		b = GameData.getBlockRegistry().getObject(name);
-		if ((b != null) && !b.equals(Blocks.air))
-			return b;
-		else
-		{
-			if (blockCache.containsKey(name))
-				return blockCache.get(name);
-			else
-			{
-				if (name.equals("TMRegistry.tile.TardisMod.DecoBlockDark")) return TMRegistry.decoBlock;
-				Iterator<Block> blockIter = GameData.getBlockRegistry().iterator();
-				while (blockIter.hasNext())
-				{
-					b = blockIter.next();
-					if (b.getUnlocalizedName().equals(name))
-					{
-						if ((name == TMRegistry.decoBlock.getUnlocalizedName()) && (b != TMRegistry.decoBlock)) continue;
-						blockCache.put(name, b);
-						return b;
-					}
-					else
-						blockCache.put(b.getUnlocalizedName(), b);
-				}
-			}
-		}
-		if (!b.equals(Blocks.air)) TardisOutput.print("TSS", "No block found for " + name + ":(");
-		return null;
-	}
+    private static String getNameFromBlock(Block id) {
+        String blockName = GameData.getBlockRegistry()
+            .getNameForObject(id);
+        if (blockName != null) return blockName;
+        if (id != null) return id.getUnlocalizedName();
+        return null;
+    }
 
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result = (prime * result) + ((block == null) ? 0 : block.hashCode());
-		result = (prime * result) + blockMeta;
-		result = (prime * result) + ((blockName == null) ? 0 : blockName.hashCode());
-		result = (prime * result) + ((nbtStore == null) ? 0 : nbtStore.hashCode());
-		return result;
-	}
+    private static Block getBlockFromName(String name) {
+        Block b = null;
+        b = GameData.getBlockRegistry()
+            .getObject(name);
+        if ((b != null) && !b.equals(Blocks.air)) return b;
+        else {
+            if (blockCache.containsKey(name)) return blockCache.get(name);
+            else {
+                if (name.equals("TMRegistry.tile.TardisMod.DecoBlockDark")) return TMRegistry.decoBlock;
+                Iterator<Block> blockIter = GameData.getBlockRegistry()
+                    .iterator();
+                while (blockIter.hasNext()) {
+                    b = blockIter.next();
+                    if (b.getUnlocalizedName()
+                        .equals(name)) {
+                        if ((name == TMRegistry.decoBlock.getUnlocalizedName()) && (b != TMRegistry.decoBlock))
+                            continue;
+                        blockCache.put(name, b);
+                        return b;
+                    } else blockCache.put(b.getUnlocalizedName(), b);
+                }
+            }
+        }
+        if (!b.equals(Blocks.air)) TardisOutput.print("TSS", "No block found for " + name + ":(");
+        return null;
+    }
 
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof SchemaStore)) return false;
-		SchemaStore other = (SchemaStore) obj;
-		if (block == null)
-		{
-			if (other.block != null) return false;
-		}
-		else if (!block.equals(other.block)) return false;
-		if (blockMeta != other.blockMeta) return false;
-		if (blockName == null)
-		{
-			if (other.blockName != null) return false;
-		}
-		else if (!blockName.equals(other.blockName)) return false;
-		if (nbtStore == null)
-		{
-			if (other.nbtStore != null) return false;
-		}
-		else if (!nbtStore.equals(other.nbtStore)) return false;
-		return true;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result) + ((block == null) ? 0 : block.hashCode());
+        result = (prime * result) + blockMeta;
+        result = (prime * result) + ((blockName == null) ? 0 : blockName.hashCode());
+        result = (prime * result) + ((nbtStore == null) ? 0 : nbtStore.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof SchemaStore)) return false;
+        SchemaStore other = (SchemaStore) obj;
+        if (block == null) {
+            if (other.block != null) return false;
+        } else if (!block.equals(other.block)) return false;
+        if (blockMeta != other.blockMeta) return false;
+        if (blockName == null) {
+            if (other.blockName != null) return false;
+        } else if (!blockName.equals(other.blockName)) return false;
+        if (nbtStore == null) {
+            if (other.nbtStore != null) return false;
+        } else if (!nbtStore.equals(other.nbtStore)) return false;
+        return true;
+    }
 
 }

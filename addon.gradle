@@ -1,0 +1,10 @@
+processResources
+{
+	exclude '**/*.wav'
+	exclude '**/*.psd'
+	exclude '**/*.PSD'
+	exclude '**/*.blend'
+	exclude '**/*.blend1'
+	exclude '**/*.tga'
+
+}

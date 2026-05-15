@@ -5,9 +5,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import tardis.common.tileents.extensions.upgrades.AbstractUpgrade;
 
-public interface IUpgradeFactory
-{
-	public AbstractUpgrade create(NBTTagCompound nbt);
+public interface IUpgradeFactory {
 
-	public AbstractUpgrade create(ItemStack is);
+    public AbstractUpgrade create(NBTTagCompound nbt);
+
+    public AbstractUpgrade create(ItemStack is);
 }

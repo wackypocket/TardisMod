@@ -1,62 +1,55 @@
 package tardis.common.tileents.extensions;
 
-public enum ManualPage
-{
-	MAIN("Menu","Main"),
-	FLIGHT("Flight","Flight"),
-	DAMAGE("Damage repair","DamageRepair"),
-	COORDS("Coordinates","Coords"),
-	TAKEOFF("Takeoff","Takeoff"),
-	UNCOORDINATED("Drifting","Uncoord"),
-	CRAFTING("Crafting","Craft"),
-	LAB("Lab","Lab"),
-	CONSOLE("Console","Console"),
-	CONSOLEF("Front","ConsoleF"),
-	CONSOLER("Right","ConsoleR"),
-	CONSOLEB("Back","ConsoleB"),
-	CONSOLEL("Left","ConsoleL"),
-	BATTERY("Battery","Battery"),
-	LRCHRONO("Chronosteel","LRChrono"),
-	LRDALEK("Dalekanium","LRDalek"),
-	LRKONTRON("Kontron","LRKontron"),
-	LRTEMPDIRT("Temporal Dirt","LRDirt"),
-	LRNAMETAG("Nametag","LRNametag"),
-	TOOLS("Tools","Tools"),
-	ROUNDELS("Roundels","Roundels"),
-	LANDPAD("Landing Pad","LandPad"),
-	GRAVLIFT("Gravity Lift","GravLift"),
-	TPM("T.P.M.","Tpm"),
-	ENGINE("Engine","Engine"),
-	UPGRADES("Upgrades","Upgrades"),
-	SONIC("Screwdriver","Sonic"),
-	STYLE("Style","Style"),
-	DECORATOR("Decorator", "Decorator"),
-	CREDITS("Credits","Credits");
+public enum ManualPage {
 
-	public final String title;
-	public final String tex;
+    MAIN("Menu", "Main"),
+    FLIGHT("Flight", "Flight"),
+    DAMAGE("Damage repair", "DamageRepair"),
+    COORDS("Coordinates", "Coords"),
+    TAKEOFF("Takeoff", "Takeoff"),
+    UNCOORDINATED("Drifting", "Uncoord"),
+    CRAFTING("Crafting", "Craft"),
+    LAB("Lab", "Lab"),
+    CONSOLE("Console", "Console"),
+    CONSOLEF("Front", "ConsoleF"),
+    CONSOLER("Right", "ConsoleR"),
+    CONSOLEB("Back", "ConsoleB"),
+    CONSOLEL("Left", "ConsoleL"),
+    BATTERY("Battery", "Battery"),
+    LRCHRONO("Chronosteel", "LRChrono"),
+    LRDALEK("Dalekanium", "LRDalek"),
+    LRKONTRON("Kontron", "LRKontron"),
+    LRTEMPDIRT("Temporal Dirt", "LRDirt"),
+    LRNAMETAG("Nametag", "LRNametag"),
+    TOOLS("Tools", "Tools"),
+    ROUNDELS("Roundels", "Roundels"),
+    LANDPAD("Landing Pad", "LandPad"),
+    GRAVLIFT("Gravity Lift", "GravLift"),
+    TPM("T.P.M.", "Tpm"),
+    ENGINE("Engine", "Engine"),
+    UPGRADES("Upgrades", "Upgrades"),
+    SONIC("Screwdriver", "Sonic"),
+    STYLE("Style", "Style"),
+    DECORATOR("Decorator", "Decorator"),
+    CREDITS("Credits", "Credits");
 
-	private ManualPage(String _title, String _tex)
-	{
-		title = _title;
-		tex = _tex;
-	}
+    public final String title;
+    public final String tex;
 
-	public static ManualPage get(int i)
-	{
-		if((i >= 0) && (i < values().length))
-			return values()[i];
-		return MAIN;
-	}
+    private ManualPage(String _title, String _tex) {
+        title = _title;
+        tex = _tex;
+    }
 
-	public static ManualPage get(String s)
-	{
-		s = s.trim();
-		if(s.startsWith("+") || s.startsWith("-"))
-			s = s.substring(1);
-		for(ManualPage p : values())
-			if(p.title.equals(s))
-				return p;
-		return MAIN;
-	}
+    public static ManualPage get(int i) {
+        if ((i >= 0) && (i < values().length)) return values()[i];
+        return MAIN;
+    }
+
+    public static ManualPage get(String s) {
+        s = s.trim();
+        if (s.startsWith("+") || s.startsWith("-")) s = s.substring(1);
+        for (ManualPage p : values()) if (p.title.equals(s)) return p;
+        return MAIN;
+    }
 }

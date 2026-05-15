@@ -4,57 +4,50 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import io.darkcraft.darkcore.mod.abstracts.AbstractBlockContainer;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.darkcraft.darkcore.mod.abstracts.AbstractBlockContainer;
+import tardis.Configs;
 import tardis.TardisMod;
 import tardis.common.tileents.ComponentTileEntity;
 
-public class ComponentBlock extends AbstractBlockContainer
-{
-	public ComponentBlock()
-	{
-		super(TardisMod.modName);
-	}
+public class ComponentBlock extends AbstractBlockContainer {
 
-	@Override
-	public TileEntity createNewTileEntity(World world, int extra)
-	{
-		return new ComponentTileEntity();
-	}
+    public ComponentBlock() {
+        super(TardisMod.modName);
+    }
 
-	@Override
-	public void initData()
-	{
-		setBlockName("Component");
-		setSubNames("Roundel","CorridorRoundel");
-		setLightLevel(1F);
-	}
+    @Override
+    public TileEntity createNewTileEntity(World world, int extra) {
+        return new ComponentTileEntity();
+    }
 
-	@Override
-	public void initRecipes()
-	{
+    @Override
+    public void initData() {
+        setBlockName("Component");
+        setSubNames("Roundel", "CorridorRoundel");
+        setLightLevel(Configs.lightBlocks ? 1 : 0);
+    }
 
-	}
+    @Override
+    public void initRecipes() {
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l)
-	{
-	   return true;
-	}
+    }
 
-	@Override
-	public boolean isOpaqueCube()
-	{
-	   return true;
-	}
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l) {
+        return super.shouldSideBeRendered(iblockaccess, i, j, k, l);
+    }
 
-	@Override
-	public Class<? extends TileEntity> getTEClass()
-	{
-		return ComponentTileEntity.class;
-	}
+    @Override
+    public boolean isOpaqueCube() {
+        return true;
+    }
+
+    @Override
+    public Class<? extends TileEntity> getTEClass() {
+        return ComponentTileEntity.class;
+    }
 
 }

@@ -7,7 +7,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
-
 import tardis.Configs;
 import tardis.api.IScrewable;
 import tardis.api.ScrewdriverMode;
@@ -21,246 +20,210 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectSource;
 import thaumcraft.api.aspects.IEssentiaTransport;
 
-public class ComponentAspect extends AbstractComponent implements IAspectSource, IScrewable
-{
-	/**
-	 * suckMode = 0 -> all aspects sucked equally and weakly
-	 * suckMode = 1 -> all aspects sucked equally and strongly
-	 * suckMode = 2 -> strongest suction transferred.
-	 */
-	private int suckMode = 0;
-	private boolean amMax = false;
-	private int mySuck = 16;
+public class ComponentAspect extends AbstractComponent implements IAspectSource, IScrewable {
 
-	protected ComponentAspect()
-	{
-	}
+    /**
+     * suckMode = 0 -> all aspects sucked equally and weakly
+     * suckMode = 1 -> all aspects sucked equally and strongly
+     * suckMode = 2 -> strongest suction transferred.
+     */
+    private int suckMode = 0;
+    private boolean amMax = false;
+    private int mySuck = 16;
 
-	public ComponentAspect(ComponentTileEntity parent)
-	{
-		parentObj = parent;
-	}
+    protected ComponentAspect() {}
 
-	@Override
-	public ITardisComponent create(ComponentTileEntity parent)
-	{
-		return new ComponentAspect(parent);
-	}
+    public ComponentAspect(ComponentTileEntity parent) {
+        parentObj = parent;
+    }
 
-	@Override
-	public AspectList getAspects()
-	{
-		TardisDataStore ds = getDatastore();
-		if (ds != null)
-		{
-			if(ds.getAspectList().size() == 0)
-				return null;
-			return ds.getAspectList();
-		}
-		return new AspectList();
-	}
+    @Override
+    public ITardisComponent create(ComponentTileEntity parent) {
+        return new ComponentAspect(parent);
+    }
 
-	@Override
-	public void setAspects(AspectList aspects)
-	{
-		TardisDataStore ds = getDatastore();
-		if (ds != null) ds.setAspectList(aspects);
-	}
+    @Override
+    public AspectList getAspects() {
+        TardisDataStore ds = getDatastore();
+        if (ds != null) {
+            if (ds.getAspectList()
+                .size() == 0) return null;
+            return ds.getAspectList();
+        }
+        return new AspectList();
+    }
 
-	@Override
-	public boolean doesContainerAccept(Aspect tag)
-	{
-		TardisDataStore ds = getDatastore();
-		if (ds != null) return ds.canHaveAspect(tag, 0);
-		return false;
-	}
+    @Override
+    public void setAspects(AspectList aspects) {
+        TardisDataStore ds = getDatastore();
+        if (ds != null) ds.setAspectList(aspects);
+    }
 
-	@Override
-	public int addToContainer(Aspect tag, int amount)
-	{
-		TardisDataStore ds = getDatastore();
-		if (ds != null) return ds.addAspect(tag, amount);
-		return 0;
-	}
+    @Override
+    public boolean doesContainerAccept(Aspect tag) {
+        TardisDataStore ds = getDatastore();
+        if (ds != null) return ds.canHaveAspect(tag, 0);
+        return false;
+    }
 
-	@Override
-	public boolean takeFromContainer(Aspect tag, int amount)
-	{
-		TardisDataStore ds = getDatastore();
-		if (ds != null) return ds.removeAspect(tag, amount);
-		return false;
-	}
+    @Override
+    public int addToContainer(Aspect tag, int amount) {
+        TardisDataStore ds = getDatastore();
+        if (ds != null) return ds.addAspect(tag, amount);
+        return 0;
+    }
 
-	@Override
-	public boolean takeFromContainer(AspectList ot)
-	{
-		return false;
-	}
+    @Override
+    public boolean takeFromContainer(Aspect tag, int amount) {
+        TardisDataStore ds = getDatastore();
+        if (ds != null) return ds.removeAspect(tag, amount);
+        return false;
+    }
 
-	@Override
-	public boolean doesContainerContainAmount(Aspect tag, int amount)
-	{
-		TardisDataStore ds = getDatastore();
-		if (ds != null) return ds.getAspectList().getAmount(tag) >= amount;
-		return false;
-	}
+    @Override
+    public boolean takeFromContainer(AspectList ot) {
+        return false;
+    }
 
-	@Override
-	public boolean doesContainerContain(AspectList ot)
-	{
-		return false;
-	}
+    @Override
+    public boolean doesContainerContainAmount(Aspect tag, int amount) {
+        TardisDataStore ds = getDatastore();
+        if (ds != null) return ds.getAspectList()
+            .getAmount(tag) >= amount;
+        return false;
+    }
 
-	@Override
-	public int containerContains(Aspect tag)
-	{
-		TardisDataStore ds = getDatastore();
-		if (ds != null) return ds.getAspectList().getAmount(tag);
-		return 0;
-	}
+    @Override
+    public boolean doesContainerContain(AspectList ot) {
+        return false;
+    }
 
-	public int getMaxAspectStorage()
-	{
-		TardisDataStore ds = getDatastore();
-		if(ds != null) return ds.getMaxAspectStorage();
-		return Configs.maxEachAspect;
-	}
+    @Override
+    public int containerContains(Aspect tag) {
+        TardisDataStore ds = getDatastore();
+        if (ds != null) return ds.getAspectList()
+            .getAmount(tag);
+        return 0;
+    }
 
-	private void dumpAspects(TardisDataStore ds, IEssentiaTransport dump, ForgeDirection f)
-	{
-		Aspect[] myAspects = ds.getAspectList().getAspects();
-		ForgeDirection o = f.getOpposite();
+    public int getMaxAspectStorage() {
+        TardisDataStore ds = getDatastore();
+        if (ds != null) return ds.getMaxAspectStorage();
+        return Configs.maxEachAspect;
+    }
 
-		if(dump.canInputFrom(o))
-		{
-			Aspect suckt = dump.getSuctionType(o);
-			int suckam = dump.getSuctionAmount(o);
-			if(suckam > (ds.maxSuck + 1))
-			{
-				amMax = true;
-				mySuck = suckam-1;
-				ds.maxSuck = mySuck;
-				ds.maxSuckT = dump.getSuctionType(o);
-			}
-			for(Aspect a : myAspects)
-			{
-				if(((suckt == null) || (suckt == a)) && (suckam > getSuction()))
-				{
-					int added = dump.addEssentia(a, ds.getAspectList().getAmount(a), o);
-					if(added > 0)
-					{
-						ds.removeAspect(a, added);
-						break;
-					}
-				}
-			}
-		}
-	}
+    private void dumpAspects(TardisDataStore ds, IEssentiaTransport dump, ForgeDirection f) {
+        Aspect[] myAspects = ds.getAspectList()
+            .getAspects();
+        ForgeDirection o = f.getOpposite();
 
-	private void takeAspects(TardisDataStore ds, IEssentiaTransport source, ForgeDirection f)
-	{
-		Aspect[] myAspects = ds.getAspectList().getAspects();
-		ForgeDirection o = f.getOpposite();
-		if(source.canOutputTo(o))
-		{
-			Aspect a = source.getEssentiaType(o);
-			if(source.getSuctionAmount(o) < getSuction())
-				if(doesContainerAccept(a))
-				{
-					int max = getMaxAspectStorage() - ds.getAspectList().getAmount(a);
-					max = source.takeEssentia(a, max, o);
-					addToContainer(a,max);
-				}
-		}
-	}
+        if (dump.canInputFrom(o)) {
+            Aspect suckt = dump.getSuctionType(o);
+            int suckam = dump.getSuctionAmount(o);
+            if (suckam > (ds.maxSuck + 1)) {
+                amMax = true;
+                mySuck = suckam - 1;
+                ds.maxSuck = mySuck;
+                ds.maxSuckT = dump.getSuctionType(o);
+            }
+            for (Aspect a : myAspects) {
+                if (((suckt == null) || (suckt == a)) && (suckam > getSuction())) {
+                    int added = dump.addEssentia(
+                        a,
+                        ds.getAspectList()
+                            .getAmount(a),
+                        o);
+                    if (added > 0) {
+                        ds.removeAspect(a, added);
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
-	@Override
-	public void updateTick()
-	{
-		super.updateTick();
-		if((tt % 10) != 1)
-			return;
-		TardisDataStore ds = getDatastore();
-		if(ds == null) return;
-		boolean wasMax = amMax && (ds.maxSuck == mySuck);
-		for(ForgeDirection f : ForgeDirection.VALID_DIRECTIONS)
-		{
-			amMax = false;
-			SimpleCoordStore me = parentObj.coords();
-			SimpleCoordStore next = me.getNearby(f);
-			TileEntity te = next.getTileEntity();
-			if(te instanceof IEssentiaTransport)
-			{
-				IEssentiaTransport other = (IEssentiaTransport) te;
-				takeAspects(ds,other,f);
-				dumpAspects(ds,other,f);
-			}
-		}
-		if(wasMax && !amMax)
-		{
-			ds.maxSuck = 16;
-			ds.maxSuckT = null;
-		}
-	}
+    private void takeAspects(TardisDataStore ds, IEssentiaTransport source, ForgeDirection f) {
+        Aspect[] myAspects = ds.getAspectList()
+            .getAspects();
+        ForgeDirection o = f.getOpposite();
+        if (source.canOutputTo(o)) {
+            Aspect a = source.getEssentiaType(o);
+            if (source.getSuctionAmount(o) < getSuction()) if (doesContainerAccept(a)) {
+                int max = getMaxAspectStorage() - ds.getAspectList()
+                    .getAmount(a);
+                max = source.takeEssentia(a, max, o);
+                addToContainer(a, max);
+            }
+        }
+    }
 
-	public int getSuction()
-	{
-		if(suckMode == 2)
-		{
-			TardisDataStore ds = getDatastore();
-			if (ds != null) return  Math.max(16,ds.maxSuck);
-		}
-		else if(suckMode == 1)
-			return 48;
-		return 16;
-	}
+    @Override
+    public void updateTick() {
+        super.updateTick();
+        if ((tt % 10) != 1) return;
+        TardisDataStore ds = getDatastore();
+        if (ds == null) return;
+        boolean wasMax = amMax && (ds.maxSuck == mySuck);
+        for (ForgeDirection f : ForgeDirection.VALID_DIRECTIONS) {
+            amMax = false;
+            SimpleCoordStore me = parentObj.coords();
+            SimpleCoordStore next = me.getNearby(f);
+            TileEntity te = next.getTileEntity();
+            if (te instanceof IEssentiaTransport) {
+                IEssentiaTransport other = (IEssentiaTransport) te;
+                takeAspects(ds, other, f);
+                dumpAspects(ds, other, f);
+            }
+        }
+        if (wasMax && !amMax) {
+            ds.maxSuck = 16;
+            ds.maxSuckT = null;
+        }
+    }
 
-	public Aspect getSuctionAspect()
-	{
-		if(suckMode == 2)
-		{
-			TardisDataStore ds = getDatastore();
-			if (ds != null) return ds.maxSuckT;
-		}
-		return null;
-	}
+    public int getSuction() {
+        if (suckMode == 2) {
+            TardisDataStore ds = getDatastore();
+            if (ds != null) return Math.max(16, ds.maxSuck);
+        } else if (suckMode == 1) return 48;
+        return 16;
+    }
 
-	@Override
-	public boolean screw(ScrewdriverHelper helper, ScrewdriverMode mode, EntityPlayer player)
-	{
-		if(ServerHelper.isClient())
-			return true;
-		if(mode == ScrewdriverMode.Reconfigure)
-		{
-			TardisDataStore ds = parentObj.getDS();
-			if((ds == null) || ds.hasPermission(player, TardisPermission.ROUNDEL))
-			{
-				suckMode = (suckMode + 1) % 3;
-				if(suckMode == 2)
-					ServerHelper.sendString(player, "This essentia interface will transfer the strongest suction");
-				else if(suckMode == 1)
-					ServerHelper.sendString(player, "This essentia interface will suck all aspects equally strongly");
-				else
-					ServerHelper.sendString(player, "This essentia interface will suck all aspects equally weakly");
-			}
-			else
-				ServerHelper.sendString(player, CoreTileEntity.cannotModifyMessage);
-		}
-		return true;
-	}
+    public Aspect getSuctionAspect() {
+        if (suckMode == 2) {
+            TardisDataStore ds = getDatastore();
+            if (ds != null) return ds.maxSuckT;
+        }
+        return null;
+    }
 
-	@Override
-	public void writeToNBT(NBTTagCompound nbt)
-	{
-		super.writeToNBT(nbt);
-		nbt.setInteger("suckmode", suckMode);
-	}
+    @Override
+    public boolean screw(ScrewdriverHelper helper, ScrewdriverMode mode, EntityPlayer player) {
+        if (ServerHelper.isClient()) return true;
+        if (mode == ScrewdriverMode.Reconfigure) {
+            TardisDataStore ds = parentObj.getDS();
+            if ((ds == null) || ds.hasPermission(player, TardisPermission.ROUNDEL)) {
+                suckMode = (suckMode + 1) % 3;
+                if (suckMode == 2)
+                    ServerHelper.sendString(player, "This essentia interface will transfer the strongest suction");
+                else if (suckMode == 1)
+                    ServerHelper.sendString(player, "This essentia interface will suck all aspects equally strongly");
+                else ServerHelper.sendString(player, "This essentia interface will suck all aspects equally weakly");
+            } else ServerHelper.sendString(player, CoreTileEntity.cannotModifyMessage);
+        }
+        return true;
+    }
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbt)
-	{
-		super.readFromNBT(nbt);
-		suckMode = nbt.getInteger("suckmode");
-	}
+    @Override
+    public void writeToNBT(NBTTagCompound nbt) {
+        super.writeToNBT(nbt);
+        nbt.setInteger("suckmode", suckMode);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        super.readFromNBT(nbt);
+        suckMode = io.darkcraft.darkcore.mod.nbt.NBTUtils.getInt(nbt, "suckmode", suckMode);
+    }
 
 }

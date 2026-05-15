@@ -8,7 +8,6 @@ import io.darkcraft.darkcore.mod.abstracts.AbstractTileEntity;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.interfaces.IActivatable;
-
 import tardis.Configs;
 import tardis.api.IArtronEnergyProvider;
 import tardis.api.IScrewable;
@@ -18,165 +17,140 @@ import tardis.common.core.helpers.Helper;
 import tardis.common.core.helpers.ScrewdriverHelper;
 import tardis.common.tileents.extensions.LabFlag;
 
-public class BatteryTileEntity extends AbstractTileEntity implements IArtronEnergyProvider, IScrewable, IActivatable
-{
-	private int					level				= -1;
-	private int					artronEnergy		= 0;
-	private int					mode				= 0;		// 0 landed, 1 uncoordinated, 2 coordinated
+public class BatteryTileEntity extends AbstractTileEntity implements IArtronEnergyProvider, IScrewable, IActivatable {
 
-	private static double		rotSpeed			= 4;
-	private double				angle				= 0;		// max = 359.99
-	private boolean				changed				= false;
+    private int level = -1;
+    private int artronEnergy = 0;
+    private int mode = 0; // 0 landed, 1 uncoordinated, 2 coordinated
 
-	public BatteryTileEntity(int _level)
-	{
-		level = _level;
-	}
+    private static double rotSpeed = 4;
+    private double angle = 0; // max = 359.99
+    private boolean changed = false;
 
-	public BatteryTileEntity()
-	{
-	}
+    public BatteryTileEntity(int _level) {
+        level = _level;
+    }
 
-	@Override
-	public void init()
-	{
-		if (level == -1) level = worldObj.getBlockMetadata(xCoord, yCoord, zCoord) + 1;
-	}
+    public BatteryTileEntity() {}
 
-	@Override
-	public void updateEntity()
-	{
-		super.updateEntity();
-		if (((tt % Configs.batTicksPerEnergy) == 0) && ((artronEnergy > 0) || Helper.isTardisWorld(worldObj) || !Configs.batNeedsJumpStart))
-			addArtronEnergy(level * Configs.batEnergyPerLevel, false);
-		if ((tt % 1200) == 0) sendUpdate();
-		if (((tt % 85) == 0) && changed)
-		{
-			changed = false;
-			sendUpdate();
-		}
+    @Override
+    public void init() {
+        if (level == -1) level = worldObj.getBlockMetadata(xCoord, yCoord, zCoord) + 1;
+    }
 
-		if (ServerHelper.isClient())
-		{
-			angle += ((rotSpeed * getArtronEnergy()) / getMaxArtronEnergy());
-			while (angle >= 360)
-				angle -= 360;
-		}
-	}
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+        if (((tt % Configs.batTicksPerEnergy) == 0)
+            && ((artronEnergy > 0) || Helper.isTardisWorld(worldObj) || !Configs.batNeedsJumpStart))
+            addArtronEnergy(level * Configs.batEnergyPerLevel, false);
+        if ((tt % 1200) == 0) sendUpdate();
+        if (((tt % 85) == 0) && changed) {
+            changed = false;
+            sendUpdate();
+        }
 
-	@Override
-	public int getMaxArtronEnergy()
-	{
-		return level * Configs.batMaxEnergyPerLevel;
-	}
+        if (ServerHelper.isClient()) {
+            angle += ((rotSpeed * getArtronEnergy()) / getMaxArtronEnergy());
+            while (angle >= 360) angle -= 360;
+        }
+    }
 
-	@Override
-	public int getArtronEnergy()
-	{
-		return artronEnergy;
-	}
+    @Override
+    public int getMaxArtronEnergy() {
+        return level * Configs.batMaxEnergyPerLevel;
+    }
 
-	@Override
-	public boolean addArtronEnergy(int amount, boolean sim)
-	{
-		if (artronEnergy < getMaxArtronEnergy())
-		{
-			if (!sim) artronEnergy = Math.min(getMaxArtronEnergy(), artronEnergy + amount);
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public int getArtronEnergy() {
+        return artronEnergy;
+    }
 
-	@Override
-	public boolean takeArtronEnergy(int amount, boolean sim)
-	{
-		if (artronEnergy >= amount)
-		{
-			if (!sim)
-			{
-				artronEnergy -= amount;
-				changed = true;
-			}
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public boolean addArtronEnergy(int amount, boolean sim) {
+        if (artronEnergy < getMaxArtronEnergy()) {
+            if (!sim) artronEnergy = Math.min(getMaxArtronEnergy(), artronEnergy + amount);
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public boolean doesSatisfyFlag(LabFlag flag)
-	{
-		switch (flag)
-		{
-			case NOTINFLIGHT:
-				return mode == 0;
-			case INFLIGHT:
-				return mode != 0;
-			case INUNCOORDINATEDFLIGHT:
-				return mode == 1;
-			case INCOORDINATEDFLIGHT:
-				return mode == 2;
-			default:
-				return false;
-		}
-	}
+    @Override
+    public boolean takeArtronEnergy(int amount, boolean sim) {
+        if (artronEnergy >= amount) {
+            if (!sim) {
+                artronEnergy -= amount;
+                changed = true;
+            }
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public boolean screw(ScrewdriverHelper helper, ScrewdriverMode mode, EntityPlayer player)
-	{
-		if (mode.equals(ScrewdriverMode.Dismantle) && ServerHelper.isServer())
-		{
-			int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-			ItemStack is = new ItemStack(TMRegistry.battery, 1, meta);
-			NBTTagCompound nbt = new NBTTagCompound();
-			writeToNBT(nbt);
-			is.stackTagCompound = nbt;
-			WorldHelper.giveItemStack(player, is);
-			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public boolean doesSatisfyFlag(LabFlag flag) {
+        switch (flag) {
+            case NOTINFLIGHT:
+                return mode == 0;
+            case INFLIGHT:
+                return mode != 0;
+            case INUNCOORDINATEDFLIGHT:
+                return mode == 1;
+            case INCOORDINATEDFLIGHT:
+                return mode == 2;
+            default:
+                return false;
+        }
+    }
 
-	@Override
-	public void writeTransmittable(NBTTagCompound nbt)
-	{
-		nbt.setInteger("ae", artronEnergy);
-		nbt.setInteger("l", level);
-		nbt.setInteger("m", mode);
-	}
+    @Override
+    public boolean screw(ScrewdriverHelper helper, ScrewdriverMode mode, EntityPlayer player) {
+        if (mode.equals(ScrewdriverMode.Dismantle) && ServerHelper.isServer()) {
+            int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+            ItemStack is = new ItemStack(TMRegistry.battery, 1, meta);
+            NBTTagCompound nbt = new NBTTagCompound();
+            writeToNBT(nbt);
+            is.stackTagCompound = nbt;
+            WorldHelper.giveItemStack(player, is);
+            worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public void readTransmittable(NBTTagCompound nbt)
-	{
-		if (nbt.hasKey("l"))
-		{
-			artronEnergy = nbt.getInteger("ae");
-			level = nbt.getInteger("l");
-			mode = nbt.getInteger("m");
-		}
-	}
+    @Override
+    public void writeTransmittable(NBTTagCompound nbt) {
+        nbt.setInteger("ae", artronEnergy);
+        nbt.setInteger("l", level);
+        nbt.setInteger("m", mode);
+    }
 
-	@Override
-	public boolean activate(EntityPlayer pl, int side)
-	{
-		mode = (mode + 1) % 3;
-		sendUpdate();
-		return true;
-	}
+    @Override
+    public void readTransmittable(NBTTagCompound nbt) {
+        if (io.darkcraft.darkcore.mod.nbt.NBTUtils.hasCompound(nbt, "l")) {
+            artronEnergy = io.darkcraft.darkcore.mod.nbt.NBTUtils.getInt(nbt, "ae", artronEnergy);
+            level = io.darkcraft.darkcore.mod.nbt.NBTUtils.getInt(nbt, "l", level);
+            mode = io.darkcraft.darkcore.mod.nbt.NBTUtils.getInt(nbt, "m", mode);
+        }
+    }
 
-	public double getAngle()
-	{
-		return angle;
-	}
+    @Override
+    public boolean activate(EntityPlayer pl, int side) {
+        mode = (mode + 1) % 3;
+        sendUpdate();
+        return true;
+    }
 
-	public int getMode()
-	{
-		return mode;
-	}
+    public double getAngle() {
+        return angle;
+    }
 
-	public int getLevel()
-	{
-		return level;
-	}
+    public int getMode() {
+        return mode;
+    }
+
+    public int getLevel() {
+        return level;
+    }
 
 }

@@ -5,21 +5,21 @@ import net.minecraft.item.ItemStack;
 import cofh.api.energy.IEnergyContainerItem;
 import cpw.mods.fml.common.Loader;
 
-public class CofHCore
-{
-	public static final String modname = "CoFHCore";
+public class CofHCore {
 
-	private static Boolean cofh = null;
-	public static boolean isCOFHInstalled()
-	{
-		if(cofh == null) cofh = Loader.isModLoaded(modname);
-		return cofh;
-	}
-	
-	public static boolean isItemElectric(ItemStack s){
-		if(isCOFHInstalled() && s.getItem() != null){
-			if(s.getItem() instanceof IEnergyContainerItem) return true;
-		}
-		return false;
-	}
+    public static final String modname = "CoFHCore";
+
+    private static Boolean cofh = null;
+
+    public static boolean isCOFHInstalled() {
+        if (cofh == null) cofh = Loader.isModLoaded(modname);
+        return cofh;
+    }
+
+    public static boolean isItemElectric(ItemStack s) {
+        if (isCOFHInstalled() && s.getItem() != null) {
+            if (s.getItem() instanceof IEnergyContainerItem) return true;
+        }
+        return false;
+    }
 }

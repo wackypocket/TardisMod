@@ -6,75 +6,62 @@ import java.util.List;
 import net.minecraft.command.ICommandSender;
 import net.minecraftforge.common.MinecraftForge;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import io.darkcraft.darkcore.mod.abstracts.AbstractCommandNew;
 import io.darkcraft.darkcore.mod.datastore.HashMapList;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import tardis.common.core.events.TardisLandingEvent;
 import tardis.common.tileents.CoreTileEntity;
 
-public class LandingEventCommand<K, V> extends AbstractCommandNew
-{
-	private static HashMapList<String, TardisLandingEvent> list = new HashMapList();
+public class LandingEventCommand<K, V> extends AbstractCommandNew {
 
-	public static void clear()
-	{
-		list.clear();
-	}
+    private static HashMapList<String, TardisLandingEvent> list = new HashMapList();
 
-	{
-		MinecraftForge.EVENT_BUS.register(this);
-	}
+    public static void clear() {
+        list.clear();
+    }
 
-	@Override
-	public String getCommandName()
-	{
-		return "tardisevent";
-	}
+    {
+        MinecraftForge.EVENT_BUS.register(this);
+    }
 
-	@Override
-	public void getAliases(List<String> list)
-	{
-		list.add("tevent");
-		list.add("teventlist");
-		list.add("tardiseventlist");
-		list.add("tel");
-	}
+    @Override
+    public String getCommandName() {
+        return "tardisevent";
+    }
 
-	private void print(ICommandSender sen, String n)
-	{
-		Iterator iter = list.iterator(n);
-		while(iter.hasNext())
-		{
-			Object o = iter.next();
-			sendString(sen, o.toString());
-		}
-	}
+    @Override
+    public void getAliases(List<String> list) {
+        list.add("tevent");
+        list.add("teventlist");
+        list.add("tardiseventlist");
+        list.add("tel");
+    }
 
-	@Override
-	public boolean process(ICommandSender sen, List<String> strList)
-	{
-		if(strList.size() == 0)
-			for(String n : list.keySet())
-				print(sen, n);
-		else if(strList.size() == 1)
-			print(sen, strList.get(0));
-		else
-			return false;
-		return true;
-	}
+    private void print(ICommandSender sen, String n) {
+        Iterator iter = list.iterator(n);
+        while (iter.hasNext()) {
+            Object o = iter.next();
+            sendString(sen, o.toString());
+        }
+    }
 
-	@SubscribeEvent
-	public void event(TardisLandingEvent event)
-	{
-		CoreTileEntity core = event.getCore();
-		if(core == null) return;
-		String o = core.getOwner();
-		if(o == null) return;
-		list.add(o, event);
-		List l = list.get(o);
-		while(l.size() > 6)
-			l.remove(0);
-	}
+    @Override
+    public boolean process(ICommandSender sen, List<String> strList) {
+        if (strList.size() == 0) for (String n : list.keySet()) print(sen, n);
+        else if (strList.size() == 1) print(sen, strList.get(0));
+        else return false;
+        return true;
+    }
+
+    @SubscribeEvent
+    public void event(TardisLandingEvent event) {
+        CoreTileEntity core = event.getCore();
+        if (core == null) return;
+        String o = core.getOwner();
+        if (o == null) return;
+        list.add(o, event);
+        List l = list.get(o);
+        while (l.size() > 6) l.remove(0);
+    }
 
 }

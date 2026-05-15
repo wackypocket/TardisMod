@@ -9,10 +9,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.texture.SimpleTexture;
@@ -20,12 +16,16 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ThreadDownloadTardisData extends SimpleTexture
-{
+public class ThreadDownloadTardisData extends SimpleTexture {
+
     private static final Logger logger = LogManager.getLogger();
     private static final AtomicInteger threadDownloadCounter = new AtomicInteger(0);
     private final File field_152434_e;
@@ -34,23 +34,19 @@ public class ThreadDownloadTardisData extends SimpleTexture
     private BufferedImage bufferedImage;
     private Thread imageThread;
     private boolean textureUploaded;
-    
-    public ThreadDownloadTardisData(File p_i1049_1_, String p_i1049_2_, ResourceLocation p_i1049_3_, IImageBuffer p_i1049_4_)
-    {
+
+    public ThreadDownloadTardisData(File p_i1049_1_, String p_i1049_2_, ResourceLocation p_i1049_3_,
+        IImageBuffer p_i1049_4_) {
         super(p_i1049_3_);
         this.field_152434_e = p_i1049_1_;
         this.imageUrl = p_i1049_2_;
         this.imageBuffer = p_i1049_4_;
     }
 
-    private void checkTextureUploaded()
-    {
-        if (!this.textureUploaded)
-        {
-            if (this.bufferedImage != null)
-            {
-                if (this.textureLocation != null)
-                {
+    private void checkTextureUploaded() {
+        if (!this.textureUploaded) {
+            if (this.bufferedImage != null) {
+                if (this.textureLocation != null) {
                     this.deleteGlTexture();
                 }
 
@@ -60,95 +56,81 @@ public class ThreadDownloadTardisData extends SimpleTexture
         }
     }
 
-    public int getGlTextureId()
-    {
+    public int getGlTextureId() {
         this.checkTextureUploaded();
         return super.getGlTextureId();
     }
 
-    public void setBufferedImage(BufferedImage p_147641_1_)
-    {
+    public void setBufferedImage(BufferedImage p_147641_1_) {
         this.bufferedImage = p_147641_1_;
 
-        if (this.imageBuffer != null)
-        {
+        if (this.imageBuffer != null) {
             this.imageBuffer.func_152634_a();
         }
     }
 
-    public void loadTexture(IResourceManager p_110551_1_) throws IOException
-    {
-        if (this.bufferedImage == null && this.textureLocation != null)
-        {
+    public void loadTexture(IResourceManager p_110551_1_) throws IOException {
+        if (this.bufferedImage == null && this.textureLocation != null) {
             super.loadTexture(p_110551_1_);
         }
 
-        if (this.imageThread == null)
-        {
-            if (this.field_152434_e != null && this.field_152434_e.isFile())
-            {
-                logger.debug("Loading http texture from local cache ({})", new Object[] {this.field_152434_e});
+        if (this.imageThread == null) {
+            if (this.field_152434_e != null && this.field_152434_e.isFile()) {
+                logger.debug("Loading http texture from local cache ({})", new Object[] { this.field_152434_e });
 
-                try
-                {
+                try {
                     this.bufferedImage = ImageIO.read(this.field_152434_e);
-                }
-                catch (IOException ioexception)
-                {
+                } catch (IOException ioexception) {
                     logger.error("Couldn\'t load skin " + this.field_152434_e, ioexception);
                     this.func_152433_a();
                 }
-            }
-            else
-            {
+            } else {
                 this.func_152433_a();
             }
         }
     }
 
-    protected void func_152433_a()
-    {
-        this.imageThread = new Thread("Texture Downloader #" + threadDownloadCounter.incrementAndGet())
-        {
-            public void run()
-            {
-                HttpURLConnection httpurlconnection = null;
-                ThreadDownloadTardisData.logger.debug("Downloading http texture from {} to {}", new Object[] {ThreadDownloadTardisData.this.imageUrl, ThreadDownloadTardisData.this.field_152434_e});
+    protected void func_152433_a() {
+        this.imageThread = new Thread("Texture Downloader #" + threadDownloadCounter.incrementAndGet()) {
 
-                try
-                {
-                    httpurlconnection = (HttpURLConnection)(new URL(ThreadDownloadTardisData.this.imageUrl)).openConnection(Minecraft.getMinecraft().getProxy());
+            public void run() {
+                HttpURLConnection httpurlconnection = null;
+                ThreadDownloadTardisData.logger.debug(
+                    "Downloading http texture from {} to {}",
+                    new Object[] { ThreadDownloadTardisData.this.imageUrl,
+                        ThreadDownloadTardisData.this.field_152434_e });
+
+                try {
+                    httpurlconnection = (HttpURLConnection) (new URL(ThreadDownloadTardisData.this.imageUrl))
+                        .openConnection(
+                            Minecraft.getMinecraft()
+                                .getProxy());
                     httpurlconnection.setDoInput(true);
                     httpurlconnection.setDoOutput(false);
+                    httpurlconnection.setConnectTimeout(5000);
+                    httpurlconnection.setReadTimeout(10000);
                     httpurlconnection.connect();
 
-                    if (httpurlconnection.getResponseCode() / 100 != 2)
-                    {
+                    if (httpurlconnection.getResponseCode() / 100 != 2) {
                         return;
                     }
 
                     BufferedImage bufferedimage;
 
-                    if (ThreadDownloadTardisData.this.field_152434_e != null)
-                    {
-                        FileUtils.copyInputStreamToFile(httpurlconnection.getInputStream(), ThreadDownloadTardisData.this.field_152434_e);
+                    if (ThreadDownloadTardisData.this.field_152434_e != null) {
+                        FileUtils.copyInputStreamToFile(
+                            httpurlconnection.getInputStream(),
+                            ThreadDownloadTardisData.this.field_152434_e);
                         bufferedimage = ImageIO.read(ThreadDownloadTardisData.this.field_152434_e);
-                    }
-                    else
-                    {
+                    } else {
                         bufferedimage = ImageIO.read(httpurlconnection.getInputStream());
                     }
 
                     ThreadDownloadTardisData.this.setBufferedImage(bufferedimage);
-                }
-                catch (Exception exception)
-                {
+                } catch (Exception exception) {
                     ThreadDownloadTardisData.logger.error("Couldn\'t download http texture", exception);
-                }
-                finally
-                {
-                    if (httpurlconnection != null)
-                    {
+                } finally {
+                    if (httpurlconnection != null) {
                         httpurlconnection.disconnect();
                     }
                 }

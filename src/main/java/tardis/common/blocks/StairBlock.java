@@ -11,72 +11,62 @@ import tardis.Configs;
 import tardis.TardisMod;
 import tardis.common.TMRegistry;
 
-public class StairBlock extends BlockStairs
-{
-	private String unlocalizedFragment;
+public class StairBlock extends BlockStairs {
 
-	public StairBlock()
-	{
-		super(TMRegistry.colorableFloorBlock,15);
-		setHardness(-1.0f);
-		setCreativeTab(TardisMod.tab);
-		setBlockName("StairBlock");
-		setLightLevel(Configs.lightBlocks ? 1 : 0);
-	}
+    private String unlocalizedFragment;
 
-	public StairBlock register()
-	{
-		GameRegistry.registerBlock(this, getUnlocalizedName());
-		return this;
-	}
-
-	@Override
-	public Block setBlockName(String name)
-	{
-		unlocalizedFragment = name;
-		return super.setBlockName(name);
-	}
-
-	@Override
-	public String getUnlocalizedName()
-	{
-		return "tile.TardisMod." + unlocalizedFragment;
-	}
-
-	@Override
-	public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z)
-    {
-		return false;
+    public StairBlock() {
+        super(TMRegistry.colorableFloorBlock, 15);
+        setHardness(-1.0f);
+        setCreativeTab(TardisMod.tab);
+        setBlockName("StairBlock");
+        setLightLevel(Configs.lightBlocks ? 1 : 0);
     }
 
-	@Override
-	public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity entity)
-	{
-		return false;
-	}
-
-	@Override
-	public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z)
-	{
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
-    {
-		return false;
+    public StairBlock register() {
+        GameRegistry.registerBlock(this, getUnlocalizedName());
+        return this;
     }
 
-	@Override
-	public int getMobilityFlag()
-	{
-		return 2;
-	}
+    @Override
+    public Block setBlockName(String name) {
+        unlocalizedFragment = name;
+        return super.setBlockName(name);
+    }
 
-	@Override
-	public boolean isOpaqueCube()
-	{
-		return false;
-	}
+    @Override
+    public String getUnlocalizedName() {
+        return "tile.TardisMod." + unlocalizedFragment;
+    }
+
+    @Override
+    public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
+        return false;
+    }
+
+    @Override
+    public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity entity) {
+        return false;
+    }
+
+    @Override
+    public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
+        return false;
+    }
+
+    @Override
+    public boolean renderAsNormalBlock() {
+        return false;
+    }
+
+    @Override
+    public int getMobilityFlag() {
+        return 2;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
 
 }

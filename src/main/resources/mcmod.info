@@ -1,17 +1,38 @@
-{
-  "modListVersion": 2,
-  "modList": [{
+[
+  {
     "modid": "TardisMod",
-    "name": "Tardis Mod",
+    "name": "Tardis Mod Legacy",
     "description": "A mod which adds functional TARDISes to minecraft",
-    "url": "http://tardismod.com",
-	"version": "${version}",
-	"mcversion": "${mcversion}",
+    "version": "0.1",
+    "mcversion": "1.7.10",
+    "url": "",
     "updateUrl": "",
-    "authorList": [ "DarkholmeTenk" ],
+    "authorList": ["DarkholmeTenk, Wackypocket"],
     "credits": "Created by DarkholmeTenk, Textures and Models by DarkholmeTenk and Kilynn",
-    "requiredMods": [ "Forge", "darkcore" ],
-    "dependencies": [ "darkcore@[0.4,0.49]" ],
-    "useDependencyInformation": true
-  }]
-}
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": [
+      "required-after:FML",
+      "required-after:darkcore",
+	  "after:Thaumcraft",
+      "after:CoFHCore",
+      "after:appliedenergistics2",
+      "after:Waila",
+      "before:DragonAPI"
+    ]
+  },
+  {
+    "modid": "darkcore",
+    "name": "TardisCore",
+    "description": "Provides core functionality to TardisModLegacy",
+    "mcversion": "1.7.10",
+    "parent": "TardisMod",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["DarkholmeTenk"],
+    "credits": "DarkholmeTenk",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

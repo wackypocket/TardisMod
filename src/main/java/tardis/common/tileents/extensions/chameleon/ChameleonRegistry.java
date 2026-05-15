@@ -9,73 +9,59 @@ import net.minecraft.nbt.NBTTagCompound;
 import tardis.TardisMod;
 import tardis.client.TardisClientProxy;
 
-public class ChameleonRegistry<C extends IChameleon>
-{
-	private C		defaultC;
-	private List<C> registry = new ArrayList<C>();
-	private boolean postInit = false;
+public class ChameleonRegistry<C extends IChameleon> {
 
-	public ChameleonRegistry(C defaultChameleon)
-	{
-		defaultC = defaultChameleon;
-		register(defaultC);
-	}
+    private C defaultC;
+    private List<C> registry = new ArrayList<C>();
+    private boolean postInit = false;
 
-	public void clear()
-	{
-		registry.clear();
-	}
+    public ChameleonRegistry(C defaultChameleon) {
+        defaultC = defaultChameleon;
+        register(defaultC);
+    }
 
-	public boolean register(C toRegister)
-	{
-		if(postInit) return false;
-		registry.add(toRegister);
-		Collections.sort(registry);
-		return true;
-	}
+    public void clear() {
+        registry.clear();
+    }
 
-	public void postInit()
-	{
-		postInit = true;
-		if(TardisMod.proxy instanceof TardisClientProxy)
-			for(C c : registry)
-				c.registerClientResources();
-	}
+    public boolean register(C toRegister) {
+        if (postInit) return false;
+        registry.add(toRegister);
+        Collections.sort(registry);
+        return true;
+    }
 
-	public int size()
-	{
-		return registry.size();
-	}
+    public void postInit() {
+        postInit = true;
+        if (TardisMod.proxy instanceof TardisClientProxy) for (C c : registry) c.registerClientResources();
+    }
 
-	public int getIndex(C c)
-	{
-		return registry.indexOf(c);
-	}
+    public int size() {
+        return registry.size();
+    }
 
-	public C get(int index)
-	{
-		if((index >= 0) && (index < size()))
-			return registry.get(index);
-		return defaultC;
-	}
+    public int getIndex(C c) {
+        return registry.indexOf(c);
+    }
 
-	public C get(String name)
-	{
-		for(C c : registry)
-			if(c.getName().equals(name))
-				return c;
-		return defaultC;
-	}
+    public C get(int index) {
+        if ((index >= 0) && (index < size())) return registry.get(index);
+        return defaultC;
+    }
 
-	public C get(NBTTagCompound nbt, String n)
-	{
-		if(nbt.hasKey(n))
-			return get(nbt.getString(n));
-		return defaultC;
-	}
+    public C get(String name) {
+        for (C c : registry) if (c.getName()
+            .equals(name)) return c;
+        return defaultC;
+    }
 
-	public C getDefault()
-	{
-		return defaultC;
-	}
+    public C get(NBTTagCompound nbt, String n) {
+        if (io.darkcraft.darkcore.mod.nbt.NBTUtils.hasCompound(nbt, n))
+            return get(io.darkcraft.darkcore.mod.nbt.NBTUtils.getString(nbt, n, ""));
+        return defaultC;
+    }
+
+    public C getDefault() {
+        return defaultC;
+    }
 }

@@ -14,12 +14,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.MinecraftForgeClient;
 
-import io.darkcraft.darkcore.mod.helpers.ServerHelper;
-
 import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import tardis.client.renderer.DecoratorRenderer;
 import tardis.client.renderer.ManualItemRenderer;
 import tardis.client.renderer.SonicScrewdriverRenderer;
@@ -53,101 +51,95 @@ import tardis.common.tileents.TardisTileEntity;
 import tardis.common.tileents.extensions.DummyRoundelTE;
 import tardis.common.tileents.extensions.chameleon.tardis.AbstractTardisChameleon;
 
-public class TardisClientProxy extends TardisProxy
-{
-	private TardisRenderer tardisRenderer = new TardisRenderer();
-	private SummonerRenderer summonerRenderer;
+public class TardisClientProxy extends TardisProxy {
 
-	public HashMap<String,ResourceLocation> skins = new HashMap<String,ResourceLocation>();
-	public static World cWorld = null;
-	public TardisClientProxy()
-	{
-	}
+    private TardisRenderer tardisRenderer = new TardisRenderer();
+    private SummonerRenderer summonerRenderer;
 
-	@Override
-	public void handleTardisTransparency(int worldID,int x, int y, int z)
-	{
-		WorldServer world = MinecraftServer.getServer().worldServerForDimension(worldID);
-		world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
-	}
+    public HashMap<String, ResourceLocation> skins = new HashMap<String, ResourceLocation>();
+    public static World cWorld = null;
 
-	@Override
-	public void init()
-	{
-		TardisOutput.print("TM", "Sending message to WAILA");
-		FMLInterModComms.sendMessage("Waila","register","tardis.common.integration.waila.WailaCallback.wailaRegister");
-	}
+    public TardisClientProxy() {}
 
-	public static SonicScrewdriverRenderer screwRenderer;
+    @Override
+    public void handleTardisTransparency(int worldID, int x, int y, int z) {
+        WorldServer world = MinecraftServer.getServer()
+            .worldServerForDimension(worldID);
+        world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
+    }
 
-	@Override
-	public void postAssignment()
-	{
-		ClientRegistry.bindTileEntitySpecialRenderer(TardisTileEntity.class, tardisRenderer);
-		ClientRegistry.bindTileEntitySpecialRenderer(CoreTileEntity.class, new CoreRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(ConsoleTileEntity.class, new ConsoleRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(ComponentTileEntity.class, new ComponentRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(EngineTileEntity.class, new EngineRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(LabTileEntity.class, new LabRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(LandingPadTileEntity.class, new LandingPadRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(BatteryTileEntity.class, new BatteryRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(DummyRoundelTE.class, new ClosedRoundelRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(ManualTileEntity.class, new ManualRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(SummonerTileEntity.class, summonerRenderer = new SummonerRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(MagicDoorTileEntity.class, new MagicDoorTileEntityRenderer());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TMRegistry.labBlock), new LabRenderer());
-		MinecraftForgeClient.registerItemRenderer(TMRegistry.screwItem, screwRenderer = new SonicScrewdriverRenderer());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TMRegistry.battery), new BatteryRenderer());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TMRegistry.tardisBlock), tardisRenderer);
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TMRegistry.summonerBlock), summonerRenderer);
-		MinecraftForgeClient.registerItemRenderer(TMRegistry.manualItem, new ManualItemRenderer());
-		MinecraftForgeClient.registerItemRenderer(TMRegistry.decoTool, new DecoratorRenderer());
-		ScrewTypeRegister.registerClientResources();
-	}
+    @Override
+    public void init() {
+        // Initialize WAILA integration safely
+        tardis.common.integration.waila.WailaIntegration.initialize();
+    }
 
-	@Override
-	public World getWorld(int id)
-	{
-		if(ServerHelper.isClient())
-			if(Minecraft.getMinecraft() != null)
-				if(Minecraft.getMinecraft().thePlayer != null)
-					cWorld = Minecraft.getMinecraft().thePlayer.worldObj;
-		if(cWorld != null)
-			if(id == cWorld.provider.dimensionId)
-				return cWorld;
-		return super.getWorld(id);
-	}
+    public static SonicScrewdriverRenderer screwRenderer;
 
-	@SideOnly(Side.CLIENT)
-	private ITextureObject loadSkin(TextureManager texMan, TardisTileEntity tte, AbstractTardisChameleon cham)
-	{
-		if(tte.owner == null)
-			return null;
-		String key = cham.getTextureDir() + "." + tte.owner;
-		String dir = cham.getTextureDir();
-		texMan = Minecraft.getMinecraft().getTextureManager();
-		ResourceLocation skin = new ResourceLocation("tardismod","textures/tardis/" + dir + "/" + StringUtils.stripControlCodes(tte.owner) +".png");
-		ITextureObject object = texMan.getTexture(skin);
-		if(object == null)
-		{
-			TardisOutput.print("TTE", "Downloading " + tte.owner + " skin");
-			object = new ThreadDownloadTardisData(null, TardisTileEntity.baseURL + dir + "/" +tte.owner+".png", cham.defaultTex(), new ImageBufferDownload());
-		}
-		texMan.loadTexture(skin, object);
-		skins.put(key, skin);
-		return object;
-	}
+    @Override
+    public void postAssignment() {
+        ClientRegistry.bindTileEntitySpecialRenderer(TardisTileEntity.class, tardisRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(CoreTileEntity.class, new CoreRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(ConsoleTileEntity.class, new ConsoleRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(ComponentTileEntity.class, new ComponentRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(EngineTileEntity.class, new EngineRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(LabTileEntity.class, new LabRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(LandingPadTileEntity.class, new LandingPadRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(BatteryTileEntity.class, new BatteryRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(DummyRoundelTE.class, new ClosedRoundelRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(ManualTileEntity.class, new ManualRenderer());
+        ClientRegistry
+            .bindTileEntitySpecialRenderer(SummonerTileEntity.class, summonerRenderer = new SummonerRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(MagicDoorTileEntity.class, new MagicDoorTileEntityRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TMRegistry.labBlock), new LabRenderer());
+        MinecraftForgeClient.registerItemRenderer(TMRegistry.screwItem, screwRenderer = new SonicScrewdriverRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TMRegistry.battery), new BatteryRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TMRegistry.tardisBlock), tardisRenderer);
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TMRegistry.summonerBlock), summonerRenderer);
+        MinecraftForgeClient.registerItemRenderer(TMRegistry.manualItem, new ManualItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(TMRegistry.decoTool, new DecoratorRenderer());
+        ScrewTypeRegister.registerClientResources();
+    }
 
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getSkin(TextureManager texMan,TardisTileEntity tte, AbstractTardisChameleon cham)
-	{
-		if(tte == null)
-			return cham.defaultTex();
+    @Override
+    public World getWorld(int id) {
+        if (ServerHelper.isClient()) if (Minecraft.getMinecraft() != null)
+            if (Minecraft.getMinecraft().thePlayer != null) cWorld = Minecraft.getMinecraft().thePlayer.worldObj;
+        if (cWorld != null) if (id == cWorld.provider.dimensionId) return cWorld;
+        return super.getWorld(id);
+    }
 
-		String key = cham.getTextureDir() + "." + tte.owner;
-		if(!skins.containsKey(key))
-			loadSkin(texMan,tte, cham);
+    @SideOnly(Side.CLIENT)
+    private ITextureObject loadSkin(TextureManager texMan, TardisTileEntity tte, AbstractTardisChameleon cham) {
+        if (tte.owner == null) return null;
+        String key = cham.getTextureDir() + "." + tte.owner;
+        String dir = cham.getTextureDir();
+        texMan = Minecraft.getMinecraft()
+            .getTextureManager();
+        ResourceLocation skin = new ResourceLocation(
+            "tardismod",
+            "textures/tardis/" + dir + "/" + StringUtils.stripControlCodes(tte.owner) + ".png");
+        ITextureObject object = texMan.getTexture(skin);
+        if (object == null) {
+            TardisOutput.print("TTE", "Downloading " + tte.owner + " skin");
+            object = new ThreadDownloadTardisData(
+                null,
+                TardisTileEntity.baseURL + dir + "/" + tte.owner + ".png",
+                cham.defaultTex(),
+                new ImageBufferDownload());
+        }
+        texMan.loadTexture(skin, object);
+        skins.put(key, skin);
+        return object;
+    }
 
-		return skins.containsKey(key) ? skins.get(key) : cham.defaultTex();
-	}
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getSkin(TextureManager texMan, TardisTileEntity tte, AbstractTardisChameleon cham) {
+        if (tte == null) return cham.defaultTex();
+
+        String key = cham.getTextureDir() + "." + tte.owner;
+        if (!skins.containsKey(key)) loadSkin(texMan, tte, cham);
+
+        return skins.containsKey(key) ? skins.get(key) : cham.defaultTex();
+    }
 }

@@ -8,59 +8,53 @@ import tardis.common.TMRegistry;
 
 public class DimensionUpgrade extends AbstractUpgrade {
 
-	private int dimID;
+    private int dimID;
 
-	public DimensionUpgrade(int id)
-	{
-		dimID = id;
-	}
-	
-	private static final ResourceLocation tex = new ResourceLocation("tardismod","textures/models/upgrades/dim.png");
-	@Override
-	public ResourceLocation getTexture()
-	{
-		return tex;
-	}
+    public DimensionUpgrade(int id) {
+        dimID = id;
+    }
 
-	@Override
-	public boolean isValid(AbstractUpgrade[] currentUpgrades) {
-		for(AbstractUpgrade up : currentUpgrades)
-			if(up instanceof DimensionUpgrade)
-				if(dimID == ((DimensionUpgrade) up).getDimID())
-					return false;
-			
-		return true;
-	}
+    private static final ResourceLocation tex = new ResourceLocation("tardismod", "textures/models/upgrades/dim.png");
 
-	@Override
-	public ItemStack getIS() {
-		return new ItemStack(TMRegistry.dimensionUpgradeItems.get(dimID), 1);
-	}
+    @Override
+    public ResourceLocation getTexture() {
+        return tex;
+    }
 
-	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
-		nbt.setString("id", "dim");
-		nbt.setInteger("dimID", dimID);
-	}
+    @Override
+    public boolean isValid(AbstractUpgrade[] currentUpgrades) {
+        for (AbstractUpgrade up : currentUpgrades)
+            if (up instanceof DimensionUpgrade) if (dimID == ((DimensionUpgrade) up).getDimID()) return false;
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		dimID = nbt.getInteger("dimID");
-	}
+        return true;
+    }
 
-	private String[] info;
-	@Override
-	public String[] getExtraInfo()
-	{
-		if(info == null)
-			info = new String[]{"Dimension ID: " + dimID};
-		return info;
-	}
-	
-	public int getDimID(){
-		return dimID;
-	}
-	
-	
+    @Override
+    public ItemStack getIS() {
+        return new ItemStack(TMRegistry.dimensionUpgradeItems.get(dimID), 1);
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbt) {
+        nbt.setString("id", "dim");
+        nbt.setInteger("dimID", dimID);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        dimID = io.darkcraft.darkcore.mod.nbt.NBTUtils.getInt(nbt, "dimID", dimID);
+    }
+
+    private String[] info;
+
+    @Override
+    public String[] getExtraInfo() {
+        if (info == null) info = new String[] { "Dimension ID: " + dimID };
+        return info;
+    }
+
+    public int getDimID() {
+        return dimID;
+    }
 
 }

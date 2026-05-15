@@ -2,23 +2,19 @@ package tardis.common.tileents.components;
 
 import tardis.common.tileents.ComponentTileEntity;
 
-public class ComponentPeripheral extends AbstractComponent
-{
-	
-	protected ComponentPeripheral()
-	{
-		
-	}
-	
-	public ComponentPeripheral(ComponentTileEntity parent)
-	{
-		parentObj = parent;
-	}
+public class ComponentPeripheral extends AbstractComponent {
 
-	@Override
-	public ITardisComponent create(ComponentTileEntity parent)
-	{
-		return new ComponentPeripheral();
-	}
+    protected ComponentPeripheral() {
+
+    }
+
+    public ComponentPeripheral(ComponentTileEntity parent) {
+        parentObj = parent;
+    }
+
+    @Override
+    public ITardisComponent create(ComponentTileEntity parent) {
+        return new ComponentPeripheral();
+    }
 
 }

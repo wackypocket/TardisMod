@@ -3,6 +3,7 @@ package tardis.common.integration.waila;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
@@ -12,95 +13,90 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public class DummyWailaAccessor implements IWailaDataAccessor
-{
-	private MovingObjectPosition	mop		= null;
-	private Block					b		= null;
-	private int						meta	= -1;
+public class DummyWailaAccessor implements IWailaDataAccessor {
 
-	@Override
-	public World getWorld()
-	{
-		return getPlayer().worldObj;
-	}
+    private MovingObjectPosition mop = null;
+    private Block b = null;
+    private int meta = -1;
 
-	@Override
-	public EntityPlayer getPlayer()
-	{
-		return Minecraft.getMinecraft().thePlayer;
-	}
+    @Override
+    public World getWorld() {
+        return getPlayer().worldObj;
+    }
 
-	@Override
-	public Block getBlock()
-	{
-		return b;
-	}
+    @Override
+    public EntityPlayer getPlayer() {
+        return Minecraft.getMinecraft().thePlayer;
+    }
 
-	@Override
-	public int getBlockID()
-	{
-		return 0;
-	}
+    @Override
+    public Block getBlock() {
+        return b;
+    }
 
-	@Override
-	public int getMetadata()
-	{
-		return meta;
-	}
+    @Override
+    public int getBlockID() {
+        return 0;
+    }
 
-	@Override
-	public TileEntity getTileEntity()
-	{
-		if(mop != null)
-			return getWorld().getTileEntity(mop.blockX, mop.blockY, mop.blockZ);
-		return null;
-	}
+    @Override
+    public int getMetadata() {
+        return meta;
+    }
 
-	@Override
-	public MovingObjectPosition getPosition()
-	{
-		return mop;
-	}
+    @Override
+    public TileEntity getTileEntity() {
+        if (mop != null) return getWorld().getTileEntity(mop.blockX, mop.blockY, mop.blockZ);
+        return null;
+    }
 
-	@Override
-	public Vec3 getRenderingPosition()
-	{
-		return null;
-	}
+    @Override
+    public MovingObjectPosition getPosition() {
+        return mop;
+    }
 
-	@Override
-	public NBTTagCompound getNBTData()
-	{
-		TileEntity te = getTileEntity();
-		NBTTagCompound nbt = new NBTTagCompound();
-		if(te != null)
-			te.writeToNBT(nbt);
-		return nbt;
-	}
+    @Override
+    public Vec3 getRenderingPosition() {
+        return null;
+    }
 
-	@Override
-	public int getNBTInteger(NBTTagCompound tag, String keyname)
-	{
-		return 0;
-	}
+    @Override
+    public NBTTagCompound getNBTData() {
+        TileEntity te = getTileEntity();
+        NBTTagCompound nbt = new NBTTagCompound();
+        if (te != null) te.writeToNBT(nbt);
+        return nbt;
+    }
 
-	@Override
-	public double getPartialFrame()
-	{
-		return 0;
-	}
+    @Override
+    public int getNBTInteger(NBTTagCompound tag, String keyname) {
+        return 0;
+    }
 
-	@Override
-	public ForgeDirection getSide()
-	{
-		return null;
-	}
+    @Override
+    public double getPartialFrame() {
+        return 0;
+    }
 
-	public void update(EntityPlayer pl, MovingObjectPosition _mop, Block _b, int _meta)
-	{
-		mop = _mop;
-		b = _b;
-		meta = _meta;
-	}
+    @Override
+    public ForgeDirection getSide() {
+        return null;
+    }
+
+    @Override
+    public ItemStack getStack() {
+        return null;
+    }
+
+    @Override
+    public String getBlockQualifiedName() {
+        return null;
+    }
+
+    public void update(EntityPlayer pl, MovingObjectPosition _mop, Block _b, int _meta) {
+        mop = _mop;
+        b = _b;
+        meta = _meta;
+    }
 
 }

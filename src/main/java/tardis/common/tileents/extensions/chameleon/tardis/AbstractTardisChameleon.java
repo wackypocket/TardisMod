@@ -12,58 +12,58 @@ import tardis.common.items.extensions.screwtypes.AbstractScrewdriverType;
 import tardis.common.tileents.TardisTileEntity;
 import tardis.common.tileents.extensions.chameleon.IChameleon;
 
-public abstract class AbstractTardisChameleon implements IChameleon
-{
-	public static final String nbtKey = "ct";
+public abstract class AbstractTardisChameleon implements IChameleon {
 
-	@Override
-	public abstract String getName();
+    public static final String nbtKey = "ct";
 
-	public String getTextureDir()
-	{
-		return getName().replace(".name", "").replace("TardisCham.", "");
-	}
+    @Override
+    public abstract String getName();
 
-	@SideOnly(Side.CLIENT)
-	public abstract void render(TardisTileEntity te);
+    public String getTextureDir() {
+        return getName().replace(".name", "")
+            .replace("TardisCham.", "");
+    }
 
-	@Override
-	public abstract void registerClientResources();
+    @SideOnly(Side.CLIENT)
+    public abstract void render(TardisTileEntity te);
 
-	@Override
-	public int compareTo(IChameleon other)
-	{
-		return getName().compareTo(other.getName());
-	}
+    @Override
+    public abstract void registerClientResources();
 
-	public boolean equals(AbstractScrewdriverType other)
-	{
-		return getName().equals(other.getName());
-	}
+    @Override
+    public int compareTo(IChameleon other) {
+        return getName().compareTo(other.getName());
+    }
 
-	public void writeToNBT(NBTTagCompound nbt)
-	{
-		nbt.setString(nbtKey, getName());
-	}
+    public boolean equals(AbstractScrewdriverType other) {
+        return getName().equals(other.getName());
+    }
 
-	@SideOnly(Side.CLIENT)
-	protected void bindTexture(ResourceLocation res)
-	{
-		Minecraft.getMinecraft().getTextureManager().bindTexture(res);
-	}
+    public void writeToNBT(NBTTagCompound nbt) {
+        nbt.setString(nbtKey, getName());
+    }
 
-	@SideOnly(Side.CLIENT)
-	public abstract ResourceLocation defaultTex();
+    @SideOnly(Side.CLIENT)
+    protected void bindTexture(ResourceLocation res) {
+        Minecraft.getMinecraft()
+            .getTextureManager()
+            .bindTexture(res);
+    }
 
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getTexture(TardisTileEntity tte)
-	{
-		return ((TardisClientProxy)TardisMod.proxy).getSkin(Minecraft.getMinecraft().getTextureManager(),tte, this);
-	}
+    @SideOnly(Side.CLIENT)
+    public abstract ResourceLocation defaultTex();
 
-	@SideOnly(Side.CLIENT)
-	public void bindSkin(TardisTileEntity tte)
-	{
-		bindTexture(getTexture(tte));
-	}
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getTexture(TardisTileEntity tte) {
+        return ((TardisClientProxy) TardisMod.proxy).getSkin(
+            Minecraft.getMinecraft()
+                .getTextureManager(),
+            tte,
+            this);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void bindSkin(TardisTileEntity tte) {
+        bindTexture(getTexture(tte));
+    }
 }

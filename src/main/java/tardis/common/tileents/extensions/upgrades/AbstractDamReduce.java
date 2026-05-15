@@ -4,109 +4,90 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
-import io.darkcraft.darkcore.mod.helpers.MathHelper;
-import io.darkcraft.darkcore.mod.helpers.SoundHelper;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.darkcraft.darkcore.mod.helpers.MathHelper;
+import io.darkcraft.darkcore.mod.helpers.SoundHelper;
 import tardis.common.TMRegistry;
 import tardis.common.dimension.damage.TardisDamageType;
 
-public abstract class AbstractDamReduce extends AbstractUpgrade
-{
-	protected int	health	= 1000;
-	protected boolean takeDamage(int dam)
-	{
-		if(health == 0) return false;
-		health = health - dam;
-		if(health <= 0)
-		{
-			health = 0;
-			if(enginePos != null)
-				SoundHelper.playSound(enginePos, "tardismod:crack", 2.5f);
-		}
-		return true;
-	}
+public abstract class AbstractDamReduce extends AbstractUpgrade {
 
-	@Override
-	public int takeDamage(TardisDamageType dam, int amount)
-	{
-		if(dam == getDamageType())
-		{
-			int blockAmount = MathHelper.ceil(amount / 2.0);
-			int acceptAmount = MathHelper.floor(amount / 2.0);
-			if(takeDamage(blockAmount))
-				return acceptAmount;
-		}
-		return amount;
-	}
+    protected int health = 1000;
 
-	public abstract TardisDamageType getDamageType();
+    protected boolean takeDamage(int dam) {
+        if (health == 0) return false;
+        health = health - dam;
+        if (health <= 0) {
+            health = 0;
+            if (enginePos != null) SoundHelper.playSound(enginePos, "tardismod:crack", 2.5f);
+        }
+        return true;
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getTexture()
-	{
-		if(health > 0)
-			return getWorkingTexture();
-		return AbstractUpgrade.brokenTexture;
-	}
+    @Override
+    public int takeDamage(TardisDamageType dam, int amount) {
+        if (dam == getDamageType()) {
+            int blockAmount = MathHelper.ceil(amount / 2.0);
+            int acceptAmount = MathHelper.floor(amount / 2.0);
+            if (takeDamage(blockAmount)) return acceptAmount;
+        }
+        return amount;
+    }
 
-	@Override
-	public ItemStack getIS()
-	{
-		if(health <= 0)
-		{
-			ItemStack is = new ItemStack(TMRegistry.upgradeItem,1,0);
-			return is;
-		}
-		else
-			return getWorkingIS();
-	}
+    public abstract TardisDamageType getDamageType();
 
-	public abstract ItemStack getWorkingIS();
+    @Override
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getTexture() {
+        if (health > 0) return getWorkingTexture();
+        return AbstractUpgrade.brokenTexture;
+    }
 
-	@Override
-	public boolean isValid(AbstractUpgrade[] currentUpgrades)
-	{
-		return true;
-	}
+    @Override
+    public ItemStack getIS() {
+        if (health <= 0) {
+            ItemStack is = new ItemStack(TMRegistry.upgradeItem, 1, 0);
+            return is;
+        } else return getWorkingIS();
+    }
 
-	@SideOnly(Side.CLIENT)
-	public abstract ResourceLocation getWorkingTexture();
+    public abstract ItemStack getWorkingIS();
 
-	@Override
-	public void writeToNBT(NBTTagCompound nbt)
-	{
-		nbt.setInteger("health", health);
-	}
+    @Override
+    public boolean isValid(AbstractUpgrade[] currentUpgrades) {
+        return true;
+    }
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbt)
-	{
-		health = nbt.getInteger("health");
-	}
+    @SideOnly(Side.CLIENT)
+    public abstract ResourceLocation getWorkingTexture();
 
-	@Override
-	public void tick(int tt)
-	{
-		if((tt % 20) == 0)
-			if(health > 0)
-				health = MathHelper.clamp(health+1, 0, 1000);
-	}
+    @Override
+    public void writeToNBT(NBTTagCompound nbt) {
+        nbt.setInteger("health", health);
+    }
 
-	public abstract String getName();
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        health = io.darkcraft.darkcore.mod.nbt.NBTUtils.getInt(nbt, "health", health);
+    }
 
-	private int lastHealth;
-	private String[] extraInfo;
-	@Override
-	public String[] getExtraInfo()
-	{
-		if((extraInfo == null) || (lastHealth != health))
-		{
-			extraInfo = new String[]{getName(),"Health: " + health + "/1000"};
-			lastHealth = health;
-		}
-		return extraInfo;
-	}
+    @Override
+    public void tick(int tt) {
+        if ((tt % 20) == 0) if (health > 0) health = MathHelper.clamp(health + 1, 0, 1000);
+    }
+
+    public abstract String getName();
+
+    private int lastHealth;
+    private String[] extraInfo;
+
+    @Override
+    public String[] getExtraInfo() {
+        if ((extraInfo == null) || (lastHealth != health)) {
+            extraInfo = new String[] { getName(), "Health: " + health + "/1000" };
+            lastHealth = health;
+        }
+        return extraInfo;
+    }
 }

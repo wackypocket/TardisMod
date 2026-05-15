@@ -8,39 +8,43 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import tardis.TardisMod;
 import tardis.common.tileents.SummonerTileEntity;
 
-public class SummonerBlock extends AbstractScrewableBlockContainer
-{
-	public SummonerBlock()
-	{
-		super(false,TardisMod.modName);
-	}
+public class SummonerBlock extends AbstractScrewableBlockContainer {
 
-	@Override
-	public void initData()
-	{
-		setBlockName("Summoner");
-		setCreativeTab(TardisMod.cTab);
-	}
+    public SummonerBlock() {
+        super(false, TardisMod.modName);
+    }
 
-	@Override
-	public void initRecipes()
-	{
-		GameRegistry.addRecipe(new ShapedOreRecipe(getIS(1,0),false,"wiw","ibi","wiw",
-				'w', "dyeWhite",
-				'i', "ingotIron",
-				'b', "dyeBlue"));
-	}
+    @Override
+    public void initData() {
+        setBlockName("Summoner");
+        setCreativeTab(TardisMod.cTab);
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
-	{
-		return new SummonerTileEntity();
-	}
+    @Override
+    public void initRecipes() {
+        GameRegistry.addRecipe(
+            new ShapedOreRecipe(
+                getIS(1, 0),
+                false,
+                "wiw",
+                "ibi",
+                "wiw",
+                'w',
+                "dyeWhite",
+                'i',
+                "ingotIron",
+                'b',
+                "dyeBlue"));
+    }
 
-	@Override
-	public Class<? extends TileEntity> getTEClass()
-	{
-		return SummonerTileEntity.class;
-	}
+    @Override
+    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+        return new SummonerTileEntity();
+    }
+
+    @Override
+    public Class<? extends TileEntity> getTEClass() {
+        return SummonerTileEntity.class;
+    }
 
 }

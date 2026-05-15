@@ -12,95 +12,76 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 import tardis.Configs;
 
-public class TardisChunkProvider implements IChunkProvider
-{
-	World worldObj;
+public class TardisChunkProvider implements IChunkProvider {
 
-	public TardisChunkProvider(World par1World)
-	{
-		worldObj = par1World;
-	}
+    World worldObj;
 
-	@Override
-	public boolean chunkExists(int i, int j)
-	{
-		return true;
-	}
+    public TardisChunkProvider(World par1World) {
+        worldObj = par1World;
+    }
 
-	@Override
-	public Chunk provideChunk(int i, int j)
-	{
-		Chunk c = new Chunk(worldObj, i, j);
-		byte[] biomeArray = c.getBiomeArray();
-		for(int k = 0;i<biomeArray.length;i++)
-			biomeArray[k] = (byte) BiomeGenBase.sky.biomeID;
-		c.generateSkylightMap();
-		return c;
-	}
+    @Override
+    public boolean chunkExists(int i, int j) {
+        return true;
+    }
 
-	@Override
-	public Chunk loadChunk(int i, int j)
-	{
-		return provideChunk(i,j);
-	}
+    @Override
+    public Chunk provideChunk(int i, int j) {
+        Chunk c = new Chunk(worldObj, i, j);
+        byte[] biomeArray = c.getBiomeArray();
+        for (int k = 0; k < biomeArray.length; k++) biomeArray[k] = (byte) BiomeGenBase.sky.biomeID;
+        c.generateSkylightMap();
+        return c;
+    }
 
-	@Override
-	public void populate(IChunkProvider ichunkprovider, int i, int j)
-	{
-	}
+    @Override
+    public Chunk loadChunk(int i, int j) {
+        return provideChunk(i, j);
+    }
 
-	@Override
-	public boolean saveChunks(boolean flag, IProgressUpdate iprogressupdate)
-	{
-		return true;
-	}
+    @Override
+    public void populate(IChunkProvider ichunkprovider, int i, int j) {}
 
-	@Override
-	public boolean unloadQueuedChunks()
-	{
-		return true;
-	}
+    @Override
+    public boolean saveChunks(boolean flag, IProgressUpdate iprogressupdate) {
+        return true;
+    }
 
-	@Override
-	public boolean canSave()
-	{
-		return true;
-	}
+    @Override
+    public boolean unloadQueuedChunks() {
+        return true;
+    }
 
-	@Override
-	public String makeString()
-	{
-		return "stringThing";
-	}
+    @Override
+    public boolean canSave() {
+        return true;
+    }
 
-	@Override
-	public List getPossibleCreatures(EnumCreatureType enumCreatureType, int i, int j, int k)
-	{	
-		if(Configs.enableTardisMobSpawning)
-			return BiomeGenBase.plains.getSpawnableList(enumCreatureType);
-		return null;
-	}
+    @Override
+    public String makeString() {
+        return "stringThing";
+    }
 
-	@Override
-	public int getLoadedChunkCount()
-	{
-		return 0;
-	}
+    @Override
+    public List getPossibleCreatures(EnumCreatureType enumCreatureType, int i, int j, int k) {
+        if (Configs.enableTardisMobSpawning) return BiomeGenBase.plains.getSpawnableList(enumCreatureType);
+        return null;
+    }
 
-	@Override
-	public void recreateStructures(int i, int j)
-	{
-	}
+    @Override
+    public int getLoadedChunkCount() {
+        return 0;
+    }
 
-	@Override
-	public void saveExtraData()
-	{
-	}
+    @Override
+    public void recreateStructures(int i, int j) {}
 
-	@Override
-	public ChunkPosition func_147416_a(World arg0, String arg1, int arg2, int arg3, int arg4)
-	{
-		return null;
-	}
+    @Override
+    public void saveExtraData() {}
+
+    @Override
+    public ChunkPosition func_147416_a(World arg0, String arg1, int arg2, int arg3, int arg4) {
+        return null;
+    }
 
 }

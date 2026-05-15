@@ -1,21 +1,20 @@
 package tardis.api;
 
-public enum TardisFunction
-{
-	TRANSMAT ("Transmat"),
-	LOCATE ("Locate"),
-	SENSORS ("Exterior sensors"),
-	STABILISE ("Blue stabilizers"),
-	RECALL ("Remote recall"),
-	TRANQUILITY ("Tranquility zone"),
-	CLARITY ("Perfect destination guesser"),
-	SPAWNPROT("Spawn Prevention Zone");
+public enum TardisFunction {
 
-	public final String name;
+    TRANSMAT("Transmat"),
+    LOCATE("Locate"),
+    SENSORS("Exterior sensors"),
+    STABILISE("Blue stabilizers"),
+    RECALL("Remote recall"),
+    TRANQUILITY("Tranquility zone"),
+    CLARITY("Perfect destination guesser"),
+    SPAWNPROT("Spawn Prevention Zone");
 
-	TardisFunction(String fName)
-	{
-		name = fName;
-	}
+    public final String name;
+
+    TardisFunction(String fName) {
+        name = fName;
+    }
 
 }

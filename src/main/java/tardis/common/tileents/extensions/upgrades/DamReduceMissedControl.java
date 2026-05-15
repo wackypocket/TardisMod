@@ -7,49 +7,45 @@ import net.minecraft.util.ResourceLocation;
 import tardis.common.TMRegistry;
 import tardis.common.dimension.damage.TardisDamageType;
 
-public class DamReduceMissedControl extends AbstractDamReduce
-{
-	public static final ResourceLocation tex = new ResourceLocation("tardismod","textures/models/upgrades/protMiss.png");
+public class DamReduceMissedControl extends AbstractDamReduce {
 
-	public DamReduceMissedControl(){}
+    public static final ResourceLocation tex = new ResourceLocation(
+        "tardismod",
+        "textures/models/upgrades/protMiss.png");
 
-	public DamReduceMissedControl(NBTTagCompound nbt)
-	{
-		readFromNBT(nbt);
-	}
+    public DamReduceMissedControl() {}
 
-	@Override
-	public ResourceLocation getWorkingTexture()
-	{
-		return tex;
-	}
+    public DamReduceMissedControl(NBTTagCompound nbt) {
+        readFromNBT(nbt);
+    }
 
-	@Override
-	public ItemStack getWorkingIS()
-	{
-		ItemStack is = new ItemStack(TMRegistry.upgradeItem,1,3);
-		is.stackTagCompound = new NBTTagCompound();
-		writeToNBT(is.stackTagCompound);
-		return is;
-	}
+    @Override
+    public ResourceLocation getWorkingTexture() {
+        return tex;
+    }
 
-	@Override
-	public void writeToNBT(NBTTagCompound nbt)
-	{
-		super.writeToNBT(nbt);
-		nbt.setString("id", "protMiss");
-	}
+    @Override
+    public ItemStack getWorkingIS() {
+        ItemStack is = new ItemStack(TMRegistry.upgradeItem, 1, 3);
+        is.stackTagCompound = new NBTTagCompound();
+        writeToNBT(is.stackTagCompound);
+        return is;
+    }
 
-	@Override
-	public TardisDamageType getDamageType()
-	{
-		return TardisDamageType.MISSEDCONTROL;
-	}
+    @Override
+    public void writeToNBT(NBTTagCompound nbt) {
+        super.writeToNBT(nbt);
+        nbt.setString("id", "protMiss");
+    }
 
-	@Override
-	public String getName()
-	{
-		return "Damage Protection Upgrade - Calibration";
-	}
+    @Override
+    public TardisDamageType getDamageType() {
+        return TardisDamageType.MISSEDCONTROL;
+    }
+
+    @Override
+    public String getName() {
+        return "Damage Protection Upgrade - Calibration";
+    }
 
 }

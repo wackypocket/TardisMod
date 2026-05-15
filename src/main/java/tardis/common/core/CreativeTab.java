@@ -9,16 +9,14 @@ import tardis.common.TMRegistry;
 
 public class CreativeTab extends CreativeTabs {
 
-	public CreativeTab(String s)
-	{
-		super(s);
-	}
+    public CreativeTab(String s) {
+        super(s);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Item getTabIconItem()
-	{
-		return TMRegistry.screwItem;
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public Item getTabIconItem() {
+        return TMRegistry.screwItem;
+    }
 
 }

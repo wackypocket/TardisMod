@@ -1,0 +1,68 @@
+package io.darkcraft.darkcore.mod.abstracts;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.IExtendedEntityProperties;
+
+import io.darkcraft.darkcore.mod.handlers.containers.EntityContainerHandler;
+import io.darkcraft.darkcore.mod.handlers.containers.IEntityContainer;
+import io.darkcraft.darkcore.mod.handlers.packets.EntityDataStorePacketHandler;
+
+public abstract class AbstractEntityDataStore<E extends Entity> implements IExtendedEntityProperties {
+
+    public final String id;
+    private IEntityContainer<?> entity;
+    private E temp;
+
+    public AbstractEntityDataStore(E ent, String _id) {
+        id = _id;
+        entity = EntityContainerHandler.getContainer(ent);
+        if (entity == null) temp = ent;
+        EntityDataStorePacketHandler.addStoreType(id);
+    }
+
+    public boolean shouldPersistDeaths() {
+        return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    public E getEntity() {
+        if (entity == null) {
+            entity = EntityContainerHandler.getContainer(temp);
+            if (entity == null) return temp;
+            else temp = null;
+        }
+        return (E) entity.getEntity();
+    }
+
+    public void queueUpdate() {
+        EntityDataStorePacketHandler.queueUpdate(this);
+    }
+
+    public boolean sendUpdate() {
+        return EntityDataStorePacketHandler.sendUpdate(this);
+    }
+
+    @Override
+    public void saveNBTData(NBTTagCompound nbt) {
+        writeToNBT(nbt);
+        writeTransmittable(nbt);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound nbt) {
+        readFromNBT(nbt);
+        readTransmittable(nbt);
+    }
+
+    public abstract void writeToNBT(NBTTagCompound nbt);
+
+    public abstract void readFromNBT(NBTTagCompound nbt);
+
+    public abstract void writeTransmittable(NBTTagCompound nbt);
+
+    public abstract void readTransmittable(NBTTagCompound nbt);
+
+    public abstract boolean notifyArea();
+
+}

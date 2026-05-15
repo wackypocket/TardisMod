@@ -9,56 +9,47 @@ import tardis.TardisMod;
 import tardis.common.TMRegistry;
 import tardis.common.tileents.extensions.chameleon.tardis.AbstractTardisChameleon;
 
-public class ChameleonUpgrade extends AbstractUpgrade
-{
-	public final AbstractTardisChameleon chameleon;
+public class ChameleonUpgrade extends AbstractUpgrade {
 
-	public ChameleonUpgrade(AbstractTardisChameleon c)
-	{
-		chameleon = c;
-	}
+    public final AbstractTardisChameleon chameleon;
 
-	private static final ResourceLocation tex = new ResourceLocation("tardismod","textures/models/upgrades/cham.png");
-	@Override
-	public ResourceLocation getTexture()
-	{
-		return tex;
-	}
+    public ChameleonUpgrade(AbstractTardisChameleon c) {
+        chameleon = c;
+    }
 
-	@Override
-	public boolean isValid(AbstractUpgrade[] currentUpgrades)
-	{
-		for(AbstractUpgrade up : currentUpgrades)
-			if(up instanceof ChameleonUpgrade)
-				return false;
-		return true;
-	}
+    private static final ResourceLocation tex = new ResourceLocation("tardismod", "textures/models/upgrades/cham.png");
 
-	@Override
-	public ItemStack getIS()
-	{
-		return new ItemStack(TMRegistry.chameleonUpgradeItem, 1, TardisMod.tardisChameleonReg.getIndex(chameleon));
-	}
+    @Override
+    public ResourceLocation getTexture() {
+        return tex;
+    }
 
-	@Override
-	public void writeToNBT(NBTTagCompound nbt)
-	{
-		nbt.setString("id", "cham");
-		chameleon.writeToNBT(nbt);
-	}
+    @Override
+    public boolean isValid(AbstractUpgrade[] currentUpgrades) {
+        for (AbstractUpgrade up : currentUpgrades) if (up instanceof ChameleonUpgrade) return false;
+        return true;
+    }
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbt)
-	{
-	}
+    @Override
+    public ItemStack getIS() {
+        return new ItemStack(TMRegistry.chameleonUpgradeItem, 1, TardisMod.tardisChameleonReg.getIndex(chameleon));
+    }
 
-	private String[] info;
-	@Override
-	public String[] getExtraInfo()
-	{
-		if(info == null)
-			info = new String[]{"Mode: " + StatCollector.translateToLocal(chameleon.getName())};
-		return info;
-	}
+    @Override
+    public void writeToNBT(NBTTagCompound nbt) {
+        nbt.setString("id", "cham");
+        chameleon.writeToNBT(nbt);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {}
+
+    private String[] info;
+
+    @Override
+    public String[] getExtraInfo() {
+        if (info == null) info = new String[] { "Mode: " + StatCollector.translateToLocal(chameleon.getName()) };
+        return info;
+    }
 
 }

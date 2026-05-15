@@ -6,29 +6,26 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import tardis.common.core.helpers.ScrewdriverHelper;
 
-public abstract class AbstractScrewdriverType implements Comparable<AbstractScrewdriverType>
-{
-	@SideOnly(Side.CLIENT)
-	abstract public void registerClientResources();
+public abstract class AbstractScrewdriverType implements Comparable<AbstractScrewdriverType> {
 
-	@SideOnly(Side.CLIENT)
-	abstract public void render(ScrewdriverHelper helper);
+    @SideOnly(Side.CLIENT)
+    abstract public void registerClientResources();
 
-	abstract public String getName();
+    @SideOnly(Side.CLIENT)
+    abstract public void render(ScrewdriverHelper helper);
 
-	@Override
-	public int compareTo(AbstractScrewdriverType other)
-	{
-		return getName().compareTo(other.getName());
-	}
+    abstract public String getName();
 
-	public boolean equals(AbstractScrewdriverType other)
-	{
-		return getName().equals(other.getName());
-	}
+    @Override
+    public int compareTo(AbstractScrewdriverType other) {
+        return getName().compareTo(other.getName());
+    }
 
-	public void writeToNBT(NBTTagCompound nbt)
-	{
-		nbt.setString("tname", getName());
-	}
+    public boolean equals(AbstractScrewdriverType other) {
+        return getName().equals(other.getName());
+    }
+
+    public void writeToNBT(NBTTagCompound nbt) {
+        nbt.setString("tname", getName());
+    }
 }

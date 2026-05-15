@@ -9,31 +9,24 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import io.darkcraft.darkcore.mod.abstracts.AbstractBlock;
 import io.darkcraft.darkcore.mod.abstracts.AbstractItemBlock;
-
 import tardis.common.TMRegistry;
 
-public class BatteryBlockItemBlock extends AbstractItemBlock
-{
+public class BatteryBlockItemBlock extends AbstractItemBlock {
 
-	public BatteryBlockItemBlock(Block par1)
-	{
-		super(par1);
-	}
+    public BatteryBlockItemBlock(Block par1) {
+        super(par1);
+    }
 
-	@Override
-	protected AbstractBlock getBlock()
-	{
-		return TMRegistry.battery;
-	}
+    @Override
+    protected AbstractBlock getBlock() {
+        return TMRegistry.battery;
+    }
 
-	@Override
-	public void addInfo(ItemStack is, EntityPlayer player, List infoList)
-	{
-		NBTTagCompound nbt = is.stackTagCompound;
-		if(nbt != null)
-		{
-			infoList.add("Artron energy: " + nbt.getInteger("ae"));
-		}
-	}
+    @Override
+    public void addInfo(ItemStack is, EntityPlayer player, List infoList) {
+        if (is == null) return;
+        NBTTagCompound nbt = is.stackTagCompound;
+        infoList.add("Artron energy: " + io.darkcraft.darkcore.mod.nbt.NBTUtils.getInt(nbt, "ae", 0));
+    }
 
 }

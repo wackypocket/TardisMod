@@ -10,44 +10,42 @@ import io.darkcraft.darkcore.mod.abstracts.AbstractTileEntity;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
-
 import tardis.api.IControlMatrix;
 import tardis.common.core.events.TardisControlEvent;
 
-public class ControlPacketHandler implements IDataPacketHandler
-{
-	@Override
-	public void handleData(NBTTagCompound data)
-	{
-		if(data != null)
-		{
-			String playerName = data.getString("pl");
-			EntityPlayer player = ServerHelper.getPlayer(playerName);
-			if(player != null)
-			{
-				int dim = data.getInteger("dim");
-				int x = data.getInteger("x");
-				int y = data.getInteger("y");
-				int z = data.getInteger("z");
-				World w = WorldHelper.getWorld(dim);
-				if(w != null)
-				{
-					TileEntity te = w.getTileEntity(x, y, z);
-					if(te instanceof IControlMatrix)
-					{
-						IControlMatrix matrix = (IControlMatrix)te;
-						int controlID = data.getInteger("cID");
-						TardisControlEvent event = new TardisControlEvent(matrix,controlID,player);
-						MinecraftForge.EVENT_BUS.post(event);
-						if(!event.isCanceled())
-						{
-							matrix.activateControl(player, controlID);
-							if(te instanceof AbstractTileEntity)
-								((AbstractTileEntity)te).queueUpdate();
-						}
-					}
-				}
-			}
-		}
-	}
+public class ControlPacketHandler implements IDataPacketHandler {
+
+    @Override
+    public void handleData(NBTTagCompound data) {
+        if (!ServerHelper.isServer()) return;
+        if (data != null) {
+            String playerName = io.darkcraft.darkcore.mod.nbt.NBTUtils.getString(data, "pl", null);
+            EntityPlayer player = ServerHelper.getPlayer(playerName);
+            if (player != null) {
+                int dim = io.darkcraft.darkcore.mod.nbt.NBTUtils.getInt(data, "dim", 0);
+                int x = io.darkcraft.darkcore.mod.nbt.NBTUtils.getInt(data, "x", 0);
+                int y = io.darkcraft.darkcore.mod.nbt.NBTUtils.getInt(data, "y", 0);
+                int z = io.darkcraft.darkcore.mod.nbt.NBTUtils.getInt(data, "z", 0);
+                if ((y < 0) || (y > 255)) return;
+                if ((player.worldObj == null) || (player.worldObj.provider == null)) return;
+                if (player.worldObj.provider.dimensionId != dim) return;
+                if (player.getDistanceSq(x + 0.5, y + 0.5, z + 0.5) > (64 * 64)) return;
+                World w = WorldHelper.getWorld(dim);
+                if (w != null) {
+                    if (!w.blockExists(x, y, z)) return;
+                    TileEntity te = w.getTileEntity(x, y, z);
+                    if (te instanceof IControlMatrix) {
+                        IControlMatrix matrix = (IControlMatrix) te;
+                        int controlID = io.darkcraft.darkcore.mod.nbt.NBTUtils.getInt(data, "cID", 0);
+                        TardisControlEvent event = new TardisControlEvent(matrix, controlID, player);
+                        MinecraftForge.EVENT_BUS.post(event);
+                        if (!event.isCanceled()) {
+                            matrix.activateControl(player, controlID);
+                            if (te instanceof AbstractTileEntity) ((AbstractTileEntity) te).queueUpdate();
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

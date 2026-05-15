@@ -4,57 +4,50 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import io.darkcraft.darkcore.mod.abstracts.AbstractBlockContainer;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.darkcraft.darkcore.mod.abstracts.AbstractBlockContainer;
 import tardis.TardisMod;
 import tardis.common.tileents.ConsoleTileEntity;
 
-public class ConsoleBlock extends AbstractBlockContainer
-{
-	public ConsoleBlock()
-	{
-		super(TardisMod.modName);
-	}
+public class ConsoleBlock extends AbstractBlockContainer {
 
-	@Override
-	public TileEntity createNewTileEntity(World world, int extra)
-	{
-		return new ConsoleTileEntity(world);
-	}
+    public ConsoleBlock() {
+        super(TardisMod.modName);
+    }
 
-	@Override
-	public void initData()
-	{
-		setBlockName("ConsoleBlock");
-		setBlockBounds(0,0,0,1,1.5F,1);
-	}
+    @Override
+    public TileEntity createNewTileEntity(World world, int extra) {
+        return new ConsoleTileEntity(world);
+    }
 
-	@Override
-	public void initRecipes()
-	{
-		// TODO Auto-generated method stub
+    @Override
+    public void initData() {
+        setBlockName("ConsoleBlock");
+        setBlockBounds(0, 0, 0, 1, 1.5F, 1);
+        setLightLevel(0.4F);
+    }
 
-	}
+    @Override
+    public void initRecipes() {
+        // TODO Auto-generated method stub
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l)
-	{
-	   return false;
-	}
+    }
 
-	@Override
-	public boolean isOpaqueCube()
-	{
-	   return false;
-	}
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l) {
+        return false;
+    }
 
-	@Override
-	public Class<? extends TileEntity> getTEClass()
-	{
-		return ConsoleTileEntity.class;
-	}
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    @Override
+    public Class<? extends TileEntity> getTEClass() {
+        return ConsoleTileEntity.class;
+    }
 
 }

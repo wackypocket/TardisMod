@@ -4,72 +4,66 @@ import io.darkcraft.darkcore.mod.config.CType;
 import io.darkcraft.darkcore.mod.config.ConfigFile;
 import io.darkcraft.darkcore.mod.config.ConfigItem;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
-
+import io.darkcraft.darkcore.mod.logging.TMLLog;
 import tardis.Configs;
 import tardis.TardisMod;
 
-public class TardisOutput
-{
-	public enum Priority
-	{
-		NONE, ERROR, WARNING, INFO, DEBUG, OLDDEBUG;
-		public static Priority get(int a)
-		{
-			Priority[] vals = values();
-			if ((a >= 0) && (a < vals.length))
-				return vals[a];
-			return Configs.priorityLevel;
-		}
-	}
+public class TardisOutput {
 
-	public static Priority		defaultPriority	= Priority.INFO;
-	public static ConfigFile	configFile		= null;
+    public enum Priority {
 
-	private static boolean shouldDisplay(String descriptor)
-	{
-		if (!(descriptor.equals("CF") || descriptor.equals("TCH") || descriptor.equals("TM")))
-		{
-			if (configFile == null)
-				if (TardisMod.inited && (TardisMod.configHandler != null))
-					configFile = TardisMod.configHandler.registerConfigNeeder("debugOutput");
-			if (configFile != null)
-				return configFile.getConfigItem(new ConfigItem(descriptor, CType.BOOLEAN, true)).getBoolean();
-		}
-		return true;
-	}
+        NONE,
+        ERROR,
+        WARNING,
+        INFO,
+        DEBUG,
+        OLDDEBUG;
 
-	public static void print(String descriptor, String message, Priority prio)
-	{
-		if (prio.ordinal() <= Configs.priorityLevel.ordinal())
-		{
-			if (!shouldDisplay(descriptor))
-				return;
-			String toDisplay = "[TM][" + descriptor + "]" + message;
-			if (prio.equals(Priority.ERROR))
-				System.err.println(toDisplay);
-			else
-				System.out.println(toDisplay);
-		}
-	}
+        public static Priority get(int a) {
+            Priority[] vals = values();
+            if ((a >= 0) && (a < vals.length)) return vals[a];
+            return Configs.priorityLevel;
+        }
+    }
 
-	public static void print(String descriptor, Object toStr, String message, Priority prio)
-	{
-		print(descriptor, "[" + toStr.toString() + "]" + message, prio);
-	}
+    public static Priority defaultPriority = Priority.INFO;
+    public static ConfigFile configFile = null;
 
-	public static void print(String descriptor, String message)
-	{
-		print(descriptor, message, defaultPriority);
-	}
+    private static boolean shouldDisplay(String descriptor) {
+        if (!(descriptor.equals("CF") || descriptor.equals("TCH") || descriptor.equals("TM"))) {
+            if (configFile == null) if (TardisMod.inited && (TardisMod.configHandler != null))
+                configFile = TardisMod.configHandler.registerConfigNeeder("debugOutput");
+            if (configFile != null) return configFile.getConfigItem(new ConfigItem(descriptor, CType.BOOLEAN, true))
+                .getBoolean();
+        }
+        return true;
+    }
 
-	public static void print(String descriptor, Object toStr, String message)
-	{
-		print(descriptor, toStr, message, defaultPriority);
-	}
+    public static void print(String descriptor, String message, Priority prio) {
+        if (prio.ordinal() <= Configs.priorityLevel.ordinal()) {
+            if (!shouldDisplay(descriptor)) return;
+            String toDisplay = "[" + descriptor + "]" + message;
+            if (prio.equals(Priority.ERROR)) TMLLog.error("TM", toDisplay);
+            else if (prio.equals(Priority.WARNING)) TMLLog.warn("TM", toDisplay);
+            else if (prio.equals(Priority.INFO)) TMLLog.info("TM", toDisplay);
+            else TMLLog.debug("TM", toDisplay);
+        }
+    }
 
-	public static Priority getPriority(int outputPriority)
-	{
-		int p = MathHelper.clamp(outputPriority, 0, Priority.values().length - 1);
-		return Priority.get(p);
-	}
+    public static void print(String descriptor, Object toStr, String message, Priority prio) {
+        print(descriptor, "[" + toStr.toString() + "]" + message, prio);
+    }
+
+    public static void print(String descriptor, String message) {
+        print(descriptor, message, defaultPriority);
+    }
+
+    public static void print(String descriptor, Object toStr, String message) {
+        print(descriptor, toStr, message, defaultPriority);
+    }
+
+    public static Priority getPriority(int outputPriority) {
+        int p = MathHelper.clamp(outputPriority, 0, Priority.values().length - 1);
+        return Priority.get(p);
+    }
 }

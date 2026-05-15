@@ -10,40 +10,45 @@ import tardis.TardisMod;
 import tardis.common.tileents.ShieldTileEntity;
 import tardis.common.tileents.extensions.CraftingComponentType;
 
-public class ShieldBlock extends AbstractScrewableBlockContainer
-{
-	public ShieldBlock()
-	{
-		super(TardisMod.modName);
-	}
+public class ShieldBlock extends AbstractScrewableBlockContainer {
 
-	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
-	{
-		return new ShieldTileEntity();
-	}
+    public ShieldBlock() {
+        super(TardisMod.modName);
+    }
 
-	@Override
-	public Class<? extends TileEntity> getTEClass()
-	{
-		return ShieldTileEntity.class;
-	}
+    @Override
+    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+        return new ShieldTileEntity();
+    }
 
-	@Override
-	public void initData()
-	{
-		setBlockName("ShieldBlock");
-	}
+    @Override
+    public Class<? extends TileEntity> getTEClass() {
+        return ShieldTileEntity.class;
+    }
 
-	@Override
-	public void initRecipes()
-	{
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(this,1), "idi","crc","kkk",
-				'k', "blockCoal",
-				'i', "ingotIron",
-				'c', CraftingComponentType.CHRONOSTEEL.getIS(1),
-				'd', CraftingComponentType.DALEKANIUM.getIS(1),
-				'r', "dustRedstone"));
-	}
+    @Override
+    public void initData() {
+        setBlockName("ShieldBlock");
+    }
+
+    @Override
+    public void initRecipes() {
+        GameRegistry.addRecipe(
+            new ShapedOreRecipe(
+                new ItemStack(this, 1),
+                "idi",
+                "crc",
+                "kkk",
+                'k',
+                "blockCoal",
+                'i',
+                "ingotIron",
+                'c',
+                CraftingComponentType.CHRONOSTEEL.getIS(1),
+                'd',
+                CraftingComponentType.DALEKANIUM.getIS(1),
+                'r',
+                "dustRedstone"));
+    }
 
 }

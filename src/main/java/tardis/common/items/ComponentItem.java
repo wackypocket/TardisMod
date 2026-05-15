@@ -6,99 +6,180 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import io.darkcraft.darkcore.mod.abstracts.AbstractItem;
-
 import cpw.mods.fml.common.registry.GameRegistry;
+import io.darkcraft.darkcore.mod.abstracts.AbstractItem;
 import tardis.TardisMod;
-import tardis.common.core.TardisOutput;
-import tardis.common.integration.ae.AEHelper;
+import tardis.common.integration.ae.AEIntegration;
 import tardis.common.integration.other.CofHCore;
 import tardis.common.integration.other.IC2;
+import tardis.common.integration.tc.ThaumcraftIntegration;
 import tardis.common.tileents.components.TardisTEComponent;
 import tardis.common.tileents.extensions.CraftingComponentType;
 import thaumcraft.api.ItemApi;
 
-public class ComponentItem extends AbstractItem
-{
+public class ComponentItem extends AbstractItem {
 
-	public ComponentItem()
-	{
-		super(TardisMod.modName);
-		setUnlocalizedName("Component");
-		setSubNames(TardisTEComponent.getStrings());
-		setMaxStackSize(8);
-		setCreativeTab(TardisMod.cTab);
-	}
+    public ComponentItem() {
+        super(TardisMod.modName);
+        setUnlocalizedName("Component");
+        setSubNames(TardisTEComponent.getStrings());
+        setMaxStackSize(8);
+        setCreativeTab(TardisMod.cTab);
+    }
 
-	public ItemStack getIS(TardisTEComponent comp)
-	{
-		return new ItemStack(this,1,comp.ordinal());
-	}
+    public ItemStack getIS(TardisTEComponent comp) {
+        return new ItemStack(this, 1, comp.ordinal());
+    }
 
-	@Override
-	public void initRecipes()
-	{
-		if(CofHCore.isCOFHInstalled() || IC2.isIC2Installed())
-			GameRegistry.addRecipe(new ShapedOreRecipe(getIS(TardisTEComponent.ENERGY), true, "grg","iii","grg",
-					'g', Items.gold_nugget,
-					'r', Items.redstone,
-					'i', Items.iron_ingot));
+    @Override
+    public void initRecipes() {
+        if (CofHCore.isCOFHInstalled() || IC2.isIC2Installed()) GameRegistry.addRecipe(
+            new ShapedOreRecipe(
+                getIS(TardisTEComponent.ENERGY),
+                true,
+                "grg",
+                "iii",
+                "grg",
+                'g',
+                Items.gold_nugget,
+                'r',
+                Items.redstone,
+                'i',
+                Items.iron_ingot));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(getIS(TardisTEComponent.FLUID), true, "grg","iii","grg",
-				'g', Items.gold_nugget,
-				'r', Items.bucket,
-				'i', Items.iron_ingot));
+        GameRegistry.addRecipe(
+            new ShapedOreRecipe(
+                getIS(TardisTEComponent.FLUID),
+                true,
+                "grg",
+                "iii",
+                "grg",
+                'g',
+                Items.gold_nugget,
+                'r',
+                Items.bucket,
+                'i',
+                Items.iron_ingot));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(getIS(TardisTEComponent.INVENTORY), true, "grg","iii","grg",
-				'g', Items.gold_nugget,
-				'r', Blocks.chest,
-				'i', Items.iron_ingot));
+        GameRegistry.addRecipe(
+            new ShapedOreRecipe(
+                getIS(TardisTEComponent.INVENTORY),
+                true,
+                "grg",
+                "iii",
+                "grg",
+                'g',
+                Items.gold_nugget,
+                'r',
+                Blocks.chest,
+                'i',
+                Items.iron_ingot));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(getIS(TardisTEComponent.TRANSMAT), true, "grg","iii","grg",
-				'g', Items.gold_nugget,
-				'r', Items.ender_pearl,
-				'i', Items.iron_ingot));
+        GameRegistry.addRecipe(
+            new ShapedOreRecipe(
+                getIS(TardisTEComponent.TRANSMAT),
+                true,
+                "grg",
+                "iii",
+                "grg",
+                'g',
+                Items.gold_nugget,
+                'r',
+                Items.ender_pearl,
+                'i',
+                Items.iron_ingot));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(getIS(TardisTEComponent.CHUNK), true, "grg","iii","gdg",
-				'g', Items.gold_nugget,
-				'r', Items.ender_pearl,
-				'd', Items.diamond,
-				'i', Items.iron_ingot));
+        GameRegistry.addRecipe(
+            new ShapedOreRecipe(
+                getIS(TardisTEComponent.CHUNK),
+                true,
+                "grg",
+                "iii",
+                "gdg",
+                'g',
+                Items.gold_nugget,
+                'r',
+                Items.ender_pearl,
+                'd',
+                Items.diamond,
+                'i',
+                Items.iron_ingot));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(getIS(TardisTEComponent.NANOGENE), true, "grg", "cac", "grg",
-				'g', Items.gold_nugget,
-				'r', Items.redstone,
-				'c', CraftingComponentType.CHRONOSTEEL.getIS(1),
-				'a', Items.apple));
-		
-		GameRegistry.addRecipe(new ShapedOreRecipe(getIS(TardisTEComponent.RESTORATIONFIELD), true, "grg", "cac", "grg",
-				'g', Items.gold_nugget,
-				'r', Items.redstone,
-				'c', CraftingComponentType.CHRONOSTEEL.getIS(1),
-				'a', Item.getItemFromBlock(Blocks.anvil)));
+        GameRegistry.addRecipe(
+            new ShapedOreRecipe(
+                getIS(TardisTEComponent.NANOGENE),
+                true,
+                "grg",
+                "cac",
+                "grg",
+                'g',
+                Items.gold_nugget,
+                'r',
+                Items.redstone,
+                'c',
+                CraftingComponentType.CHRONOSTEEL.getIS(1),
+                'a',
+                Items.apple));
 
-		if(AEHelper.aeAPI != null)
-		{
-			ItemStack i = AEHelper.aeAPI.materials().materialCertusQuartzCrystal.stack(1);
-			if(i != null)
-			{
-				TardisOutput.print("TCI","Registering AE recipe");
-				GameRegistry.addRecipe(new ShapedOreRecipe(getIS(TardisTEComponent.GRID), true, "grg","iii","grg",
-						'g', Items.gold_nugget,
-						'r', i.copy(),
-						'i', Items.iron_ingot));
-			}
-		}
+        GameRegistry.addRecipe(
+            new ShapedOreRecipe(
+                getIS(TardisTEComponent.RESTORATIONFIELD),
+                true,
+                "grg",
+                "cac",
+                "grg",
+                'g',
+                Items.gold_nugget,
+                'r',
+                Items.redstone,
+                'c',
+                CraftingComponentType.CHRONOSTEEL.getIS(1),
+                'a',
+                Item.getItemFromBlock(Blocks.anvil)));
 
-		ItemStack shard = ItemApi.getItem("itemResource", 0);
-		if(shard != null)
-		{
-			TardisOutput.print("TCI","Registering TC recipe");
-			GameRegistry.addRecipe(new ShapedOreRecipe(getIS(TardisTEComponent.THAUMCRAFT), true, "grg","iii","grg",
-					'g', Items.gold_nugget,
-					'r', shard,
-					'i', "ingotThaumium"));
-		}
-	}
+        if (AEIntegration.isAE2Available()) {
+            ItemStack i = AEIntegration.getCertusQuartzCrystal();
+            if (i != null) {
+                io.darkcraft.darkcore.mod.logging.TMLLog.info("", "Registering AE2 ME Cable Interface recipe");
+                GameRegistry.addRecipe(
+                    new ShapedOreRecipe(
+                        getIS(TardisTEComponent.GRID),
+                        true,
+                        "grg",
+                        "iii",
+                        "grg",
+                        'g',
+                        Items.gold_nugget,
+                        'r',
+                        i.copy(),
+                        'i',
+                        Items.iron_ingot));
+            } else {
+                io.darkcraft.darkcore.mod.logging.TMLLog
+                    .alwaysInfo("Failed to get AE2 Certus Quartz Crystal - ME Cable Interface recipe not registered");
+            }
+        } else {
+            io.darkcraft.darkcore.mod.logging.TMLLog
+                .alwaysInfo("AE2 not available - ME Cable Interface recipe not registered");
+        }
+
+        if (ThaumcraftIntegration.isThaumcraftAvailable()) {
+            io.darkcraft.darkcore.mod.logging.TMLLog.info("", "Registering TC recipe");
+            ItemStack shard = ItemApi.getItem("itemResource", 0);
+            if (shard != null) GameRegistry.addRecipe(
+                new ShapedOreRecipe(
+                    getIS(TardisTEComponent.THAUMCRAFT),
+                    true,
+                    "grg",
+                    "iii",
+                    "grg",
+                    'g',
+                    Items.gold_nugget,
+                    'r',
+                    shard,
+                    'i',
+                    "ingotThaumium"));
+        }
+    }
 
 }

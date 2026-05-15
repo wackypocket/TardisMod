@@ -15,85 +15,71 @@ import appeng.api.util.DimensionalCoord;
 import tardis.common.core.helpers.Helper;
 import tardis.common.tileents.CoreTileEntity;
 
-public class CoreGrid implements IGridBlock
-{
-	private DimensionalCoord coreCoords = null;
+public class CoreGrid implements IGridBlock {
 
-	public CoreGrid(CoreTileEntity core)
-	{
-		coreCoords = new DimensionalCoord(core);
-	}
+    private DimensionalCoord coreCoords = null;
 
-	@Override
-	public double getIdlePowerUsage()
-	{
-		return 0;
-	}
+    public CoreGrid(CoreTileEntity core) {
+        coreCoords = new DimensionalCoord(core);
+    }
 
-	@Override
-	public EnumSet<GridFlags> getFlags()
-	{
-		return EnumSet.of(GridFlags.DENSE_CAPACITY);
-	}
+    @Override
+    public double getIdlePowerUsage() {
+        return 0;
+    }
 
-	public boolean isWorldAccessable()
-	{
-		return false;
-	}
+    @Override
+    public EnumSet<GridFlags> getFlags() {
+        return EnumSet.of(GridFlags.DENSE_CAPACITY);
+    }
 
-	@Override
-	public boolean isWorldAccessible()
-	{
-		return isWorldAccessable();
-	}
+    public boolean isWorldAccessable() {
+        return false;
+    }
 
-	@Override
-	public DimensionalCoord getLocation()
-	{
-		return coreCoords;
-	}
+    @Override
+    public boolean isWorldAccessible() {
+        return isWorldAccessable();
+    }
 
-	@Override
-	public AEColor getGridColor()
-	{
-		return AEColor.Transparent;
-	}
+    @Override
+    public DimensionalCoord getLocation() {
+        return coreCoords;
+    }
 
-	@Override
-	public void onGridNotification(GridNotification notification)
-	{
-		// TODO Auto-generated method stub
+    @Override
+    public AEColor getGridColor() {
+        return AEColor.Transparent;
+    }
 
-	}
+    @Override
+    public void onGridNotification(GridNotification notification) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void setNetworkStatus(IGrid grid, int channelsInUse)
-	{
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void setNetworkStatus(IGrid grid, int channelsInUse) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public EnumSet<ForgeDirection> getConnectableSides()
-	{
-		return EnumSet.noneOf(ForgeDirection.class);
-	}
+    }
 
-	@Override
-	public IGridHost getMachine()
-	{
-		return Helper.getTardisCore(coreCoords.getWorld());
-	}
+    @Override
+    public EnumSet<ForgeDirection> getConnectableSides() {
+        return EnumSet.noneOf(ForgeDirection.class);
+    }
 
-	@Override
-	public void gridChanged()
-	{
-	}
+    @Override
+    public IGridHost getMachine() {
+        return Helper.getTardisCore(coreCoords.getWorld());
+    }
 
-	@Override
-	public ItemStack getMachineRepresentation()
-	{
-		return null;
-	}
+    @Override
+    public void gridChanged() {}
+
+    @Override
+    public ItemStack getMachineRepresentation() {
+        return null;
+    }
 
 }

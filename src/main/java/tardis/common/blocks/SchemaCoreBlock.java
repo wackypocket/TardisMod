@@ -6,77 +6,65 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import io.darkcraft.darkcore.mod.abstracts.AbstractBlockContainer;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.darkcraft.darkcore.mod.abstracts.AbstractBlockContainer;
 import tardis.Configs;
 import tardis.TardisMod;
 import tardis.common.tileents.SchemaCoreTileEntity;
 
-public class SchemaCoreBlock extends AbstractBlockContainer
-{
-	private final boolean visible;
-	private IIcon blankIcon;
+public class SchemaCoreBlock extends AbstractBlockContainer {
 
-	public SchemaCoreBlock()
-	{
-		super(TardisMod.modName);
-		visible = Configs.visibleSchema;
-	}
+    private final boolean visible;
+    private IIcon blankIcon;
 
-	@Override
-	public TileEntity createNewTileEntity(World world, int extra)
-	{
-		return new SchemaCoreTileEntity();
-	}
+    public SchemaCoreBlock() {
+        super(Configs.visibleSchema, TardisMod.modName);
+        visible = Configs.visibleSchema;
+    }
 
-	@Override
-	public void initData()
-	{
-		setBlockName("SchemaCore");
+    @Override
+    public TileEntity createNewTileEntity(World world, int extra) {
+        return new SchemaCoreTileEntity();
+    }
 
-	}
+    @Override
+    public void initData() {
+        setBlockName("SchemaCore");
 
-	@Override
-	public void initRecipes()
-	{
-	}
+    }
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public boolean isOpaqueCube()
-	{
-		return visible;
-	}
+    @Override
+    public void initRecipes() {}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerBlockIcons(IIconRegister register)
-	{
-		super.registerBlockIcons(register);
-		blankIcon = register.registerIcon("tardismod:blank");
-	}
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean isOpaqueCube() {
+        return visible;
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int s, int d)
-	{
-		if(visible)
-			return super.getIcon(s, d);
-		return blankIcon;
-	}
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerBlockIcons(IIconRegister register) {
+        super.registerBlockIcons(register);
+        blankIcon = register.registerIcon("tardismod:blank");
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess w, int x, int y, int z, int s)
-	{
-		return visible;
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int s, int d) {
+        if (visible) return super.getIcon(s, d);
+        return blankIcon;
+    }
 
-	@Override
-	public Class<? extends TileEntity> getTEClass()
-	{
-		return SchemaCoreTileEntity.class;
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockAccess w, int x, int y, int z, int s) {
+        return visible;
+    }
+
+    @Override
+    public Class<? extends TileEntity> getTEClass() {
+        return SchemaCoreTileEntity.class;
+    }
 }

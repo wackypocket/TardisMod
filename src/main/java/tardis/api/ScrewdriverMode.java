@@ -1,32 +1,29 @@
 package tardis.api;
 
-public enum ScrewdriverMode
-{
-	Reconfigure		(0.2,0.4,1,		null),
-	Locate			(0.2,1,0.5,		TardisFunction.LOCATE),
-	Schematic		(1,1,0.3,		null),
-	Dismantle		(0.7,0.1,0.1,	null),
-	Transmat		(0.8,0.3,1.0,	TardisFunction.TRANSMAT),
-	Recall			(1.0,0.6,0.1,	TardisFunction.RECALL),
-	Link			(0.7,0.4,0.0,	null);
+public enum ScrewdriverMode {
 
-	public TardisFunction requiredFunction;
-	public final double[] c;
+    Reconfigure(0.2, 0.4, 1, null),
+    Locate(0.2, 1, 0.5, TardisFunction.LOCATE),
+    Schematic(1, 1, 0.3, null),
+    Dismantle(0.7, 0.1, 0.1, null),
+    Transmat(0.8, 0.3, 1.0, TardisFunction.TRANSMAT),
+    Recall(1.0, 0.6, 0.1, TardisFunction.RECALL),
+    Link(0.7, 0.4, 0.0, null);
 
-	ScrewdriverMode(double r, double g, double b, TardisFunction req)
-	{
-		requiredFunction = req;
-		c = new double[3];
-		c[0] = r;
-		c[1] = g;
-		c[2] = b;
-	}
+    public TardisFunction requiredFunction;
+    public final double[] c;
 
-	public static ScrewdriverMode get(int ordinal)
-	{
-		ScrewdriverMode[] values = values();
-		if((ordinal >= 0) && (ordinal < values.length))
-			return values[ordinal];
-		return null;
-	}
+    ScrewdriverMode(double r, double g, double b, TardisFunction req) {
+        requiredFunction = req;
+        c = new double[3];
+        c[0] = r;
+        c[1] = g;
+        c[2] = b;
+    }
+
+    public static ScrewdriverMode get(int ordinal) {
+        ScrewdriverMode[] values = values();
+        if ((ordinal >= 0) && (ordinal < values.length)) return values[ordinal];
+        return null;
+    }
 }

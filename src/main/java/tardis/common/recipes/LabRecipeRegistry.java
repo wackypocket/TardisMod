@@ -8,82 +8,72 @@ import java.util.Map;
 
 import net.minecraft.nbt.NBTTagCompound;
 
+import gnu.trove.map.hash.THashMap;
 import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import io.darkcraft.darkcore.mod.nbt.impl.PrimMapper;
-
-import gnu.trove.map.hash.THashMap;
 import tardis.common.tileents.extensions.LabRecipe;
 
-public class LabRecipeRegistry
-{
-	private static List<LabRecipe> recipes = new ArrayList<LabRecipe>();
-	private static Map<String,LabRecipe> recipeMap = new THashMap();
+public class LabRecipeRegistry {
 
-	static
-	{
-		NBTHelper.register(LabRecipe.class, new PrimMapper<LabRecipe>(){
-			@Override
-			public boolean handleSubclasses(){ return true; }
+    private static List<LabRecipe> recipes = new ArrayList<LabRecipe>();
+    private static Map<String, LabRecipe> recipeMap = new THashMap();
 
-			@Override
-			public void writeToNBT(NBTTagCompound nbt, String id, LabRecipe t)
-			{
-				if(!(t instanceof LabRecipe))
-					return;
-				nbt.setString("id", t.id);
-			}
+    static {
+        NBTHelper.register(LabRecipe.class, new PrimMapper<LabRecipe>() {
 
-			@Override
-			public LabRecipe readFromNBT(NBTTagCompound nbt, String id)
-			{
-				return getRecipe(nbt.getString("id"));
-			}
-		});
-	}
+            @Override
+            public boolean handleSubclasses() {
+                return true;
+            }
 
-	public static void addRecipe(LabRecipe toAdd)
-	{
-		if((toAdd != null) && toAdd.isValid())
-		{
-			if(recipeMap.containsKey(toAdd.id)) return;
-			recipes.add(toAdd);
-			recipeMap.put(toAdd.id,toAdd);
-			Collections.sort(recipes, sorter);
-		}
-	}
+            @Override
+            public void writeToNBT(NBTTagCompound nbt, String id, LabRecipe t) {
+                if (!(t instanceof LabRecipe)) return;
+                nbt.setString("id", t.id);
+            }
 
-	public static void removeRecipe(LabRecipe toRem)
-	{
-		recipes.remove(toRem);
-		recipeMap.remove(toRem.id);
-	}
+            @Override
+            public LabRecipe readFromNBT(NBTTagCompound nbt, String id) {
+                return getRecipe(io.darkcraft.darkcore.mod.nbt.NBTUtils.getString(nbt, "id", ""));
+            }
+        });
+    }
 
-	public static void removeRecipe(String id)
-	{
-		LabRecipe lr = recipeMap.get(id);
-		if(lr != null)
-		{
-			recipeMap.remove(id);
-			recipes.remove(lr);
-		}
-	}
+    public static void addRecipe(LabRecipe toAdd) {
+        if ((toAdd != null) && toAdd.isValid()) {
+            if (recipeMap.containsKey(toAdd.id)) return;
+            recipes.add(toAdd);
+            recipeMap.put(toAdd.id, toAdd);
+            Collections.sort(recipes, sorter);
+        }
+    }
 
-	public static List<LabRecipe> getRecipes()
-	{
-		return recipes;
-	}
+    public static void removeRecipe(LabRecipe toRem) {
+        recipes.remove(toRem);
+        recipeMap.remove(toRem.id);
+    }
 
-	public static LabRecipe getRecipe(String id)
-	{
-		return recipeMap.get(id);
-	}
+    public static void removeRecipe(String id) {
+        LabRecipe lr = recipeMap.get(id);
+        if (lr != null) {
+            recipeMap.remove(id);
+            recipes.remove(lr);
+        }
+    }
 
-	private static Comparator<LabRecipe> sorter = new Comparator<LabRecipe>(){
+    public static List<LabRecipe> getRecipes() {
+        return recipes;
+    }
 
-		@Override
-		public int compare(LabRecipe a, LabRecipe b)
-		{
-			return a.id.compareTo(b.id);
-		}
-	};
+    public static LabRecipe getRecipe(String id) {
+        return recipeMap.get(id);
+    }
+
+    private static Comparator<LabRecipe> sorter = new Comparator<LabRecipe>() {
+
+        @Override
+        public int compare(LabRecipe a, LabRecipe b) {
+            return a.id.compareTo(b.id);
+        }
+    };
 }

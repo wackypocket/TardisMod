@@ -7,62 +7,56 @@ import net.minecraft.util.ResourceLocation;
 import tardis.common.TMRegistry;
 import tardis.common.dimension.damage.TardisDamageType;
 
-public class DamReduceCombat extends AbstractDamReduce
-{
-	public static final ResourceLocation tex = new ResourceLocation("tardismod","textures/models/upgrades/protComb.png");
+public class DamReduceCombat extends AbstractDamReduce {
 
-	public DamReduceCombat(){}
+    public static final ResourceLocation tex = new ResourceLocation(
+        "tardismod",
+        "textures/models/upgrades/protComb.png");
 
-	public DamReduceCombat(NBTTagCompound nbt)
-	{
-		readFromNBT(nbt);
-	}
+    public DamReduceCombat() {}
 
-	@Override
-	public ResourceLocation getWorkingTexture()
-	{
-		return tex;
-	}
+    public DamReduceCombat(NBTTagCompound nbt) {
+        readFromNBT(nbt);
+    }
 
-	@Override
-	public ItemStack getWorkingIS()
-	{
-		ItemStack is = new ItemStack(TMRegistry.upgradeItem,1,2);
-		is.stackTagCompound = new NBTTagCompound();
-		writeToNBT(is.stackTagCompound);
-		return is;
-	}
+    @Override
+    public ResourceLocation getWorkingTexture() {
+        return tex;
+    }
 
-	@Override
-	public void writeToNBT(NBTTagCompound nbt)
-	{
-		super.writeToNBT(nbt);
-		nbt.setString("id", "protComb");
-	}
+    @Override
+    public ItemStack getWorkingIS() {
+        ItemStack is = new ItemStack(TMRegistry.upgradeItem, 1, 2);
+        is.stackTagCompound = new NBTTagCompound();
+        writeToNBT(is.stackTagCompound);
+        return is;
+    }
 
-	@Override
-	public TardisDamageType getDamageType()
-	{
-		return TardisDamageType.COMBAT;
-	}
+    @Override
+    public void writeToNBT(NBTTagCompound nbt) {
+        super.writeToNBT(nbt);
+        nbt.setString("id", "protComb");
+    }
 
-	@Override
-	public boolean isValid(AbstractUpgrade[] currentUpgrades)
-	{
-		int c = 0;
-		for(AbstractUpgrade up : currentUpgrades)
-		{
-			if(up == null) continue;
-			if(up instanceof DamReduceCombat) c++;
-			if(c >= 2) return false;
-		}
-		return true;
-	}
+    @Override
+    public TardisDamageType getDamageType() {
+        return TardisDamageType.COMBAT;
+    }
 
-	@Override
-	public String getName()
-	{
-		return "Damage Protection Upgrade - Combat";
-	}
+    @Override
+    public boolean isValid(AbstractUpgrade[] currentUpgrades) {
+        int c = 0;
+        for (AbstractUpgrade up : currentUpgrades) {
+            if (up == null) continue;
+            if (up instanceof DamReduceCombat) c++;
+            if (c >= 2) return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String getName() {
+        return "Damage Protection Upgrade - Combat";
+    }
 
 }

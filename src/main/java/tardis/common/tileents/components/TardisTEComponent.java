@@ -1,53 +1,52 @@
 package tardis.common.tileents.components;
 
-public enum TardisTEComponent
-{
-		TRANSMAT		("Transmat","stickTrans",new ComponentTransmat(),ValPos.INSIDE),
-		GRID			("Mass-Energy","stickGrid",new ComponentGrid(),ValPos.BOTH),
-		ENERGY			("RF","stickEnergy",new ComponentEnergy(),ValPos.BOTH),
-		INVENTORY		("Inv","stickInv",new ComponentInventory(),ValPos.BOTH),
-		FLUID			("Fluid","stickFlu",new ComponentFluid(),ValPos.BOTH),
-		CHUNK			("ChunkLoader","stickChLo", new ComponentChunkLoader(),ValPos.BOTH),
-		COMPUTER		("Peripheral","stickPer", new ComponentPeripheral(),ValPos.BOTH),
-		NANOGENE		("Nanogene","stickNano", new ComponentNanogene(),ValPos.BOTH),
-		RESTORATIONFIELD("RestorationField","stickRestoration", new ComponentRestorationField(),ValPos.BOTH),
-		THAUMCRAFT		("Aspects","stickAspect",new ComponentAspect(),ValPos.BOTH);
+import tardis.common.integration.ae.ComponentGridFactory;
+import tardis.common.integration.tc.ComponentAspectFactory;
 
-		public enum ValPos
-		{
-			INSIDE, OUTSIDE, BOTH;
-		}
+public enum TardisTEComponent {
 
-		private static String[] stringArray = null;
-		public final ValPos valPos;
-		public final String componentName;
-		public final String tex;
+    TRANSMAT("Transmat", "stickTrans", new ComponentTransmat(), ValPos.INSIDE),
+    GRID("Mass-Energy", "stickGrid", ComponentGridFactory.create(null), ValPos.BOTH),
+    ENERGY("RF", "stickEnergy", new ComponentEnergy(), ValPos.BOTH),
+    INVENTORY("Inv", "stickInv", new ComponentInventory(), ValPos.BOTH),
+    FLUID("Fluid", "stickFlu", new ComponentFluid(), ValPos.BOTH),
+    CHUNK("ChunkLoader", "stickChLo", new ComponentChunkLoader(), ValPos.BOTH),
+    COMPUTER("Peripheral", "stickPer", new ComponentPeripheral(), ValPos.BOTH),
+    NANOGENE("Nanogene", "stickNano", new ComponentNanogene(), ValPos.BOTH),
+    RESTORATIONFIELD("RestorationField", "stickRestoration", new ComponentRestorationField(), ValPos.BOTH),
+    THAUMCRAFT("Aspects", "stickAspect", ComponentAspectFactory.create(null), ValPos.BOTH);
 
-		public ITardisComponent baseObj;
-		TardisTEComponent(String name, String _tex, ITardisComponent comp, ValPos validPosition)
-		{
-			tex = _tex;
-			baseObj = comp;
-			componentName = name;
-			valPos = validPosition;
-		}
+    public enum ValPos {
+        INSIDE,
+        OUTSIDE,
+        BOTH;
+    }
 
-		public boolean isValid(boolean inside)
-		{
-			if(inside)
-				return valPos!=ValPos.OUTSIDE;
-			return valPos!=ValPos.INSIDE;
-		}
+    private static String[] stringArray = null;
+    public final ValPos valPos;
+    public final String componentName;
+    public final String tex;
 
-		public static String[] getStrings()
-		{
-			if(stringArray == null)
-			{
-				TardisTEComponent[] vals = values();
-				stringArray = new String[vals.length];
-				for(int i = 0; i < vals.length;i++)
-					stringArray[i] = vals[i].componentName;
-			}
-			return stringArray;
-		}
+    public ITardisComponent baseObj;
+
+    TardisTEComponent(String name, String _tex, ITardisComponent comp, ValPos validPosition) {
+        tex = _tex;
+        baseObj = comp;
+        componentName = name;
+        valPos = validPosition;
+    }
+
+    public boolean isValid(boolean inside) {
+        if (inside) return valPos != ValPos.OUTSIDE;
+        return valPos != ValPos.INSIDE;
+    }
+
+    public static String[] getStrings() {
+        if (stringArray == null) {
+            TardisTEComponent[] vals = values();
+            stringArray = new String[vals.length];
+            for (int i = 0; i < vals.length; i++) stringArray[i] = vals[i].componentName;
+        }
+        return stringArray;
+    }
 }
